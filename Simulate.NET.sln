@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{500079
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulate.NET.Tests", "Simulate.NET.Tests\Simulate.NET.Tests.csproj", "{D18CF022-1A98-4E99-BFBB-7789033E06D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basics.NET", "Basics.NET\Basics.NET.csproj", "{97A80A0F-3101-44B7-9821-CF8D81080296}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basics.NET.Tests", "Basics.NET.Tests\Basics.NET.Tests.csproj", "{09A3008D-B206-421B-932F-544A42536FDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{D18CF022-1A98-4E99-BFBB-7789033E06D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D18CF022-1A98-4E99-BFBB-7789033E06D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D18CF022-1A98-4E99-BFBB-7789033E06D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97A80A0F-3101-44B7-9821-CF8D81080296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97A80A0F-3101-44B7-9821-CF8D81080296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97A80A0F-3101-44B7-9821-CF8D81080296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97A80A0F-3101-44B7-9821-CF8D81080296}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A3008D-B206-421B-932F-544A42536FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A3008D-B206-421B-932F-544A42536FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A3008D-B206-421B-932F-544A42536FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A3008D-B206-421B-932F-544A42536FDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

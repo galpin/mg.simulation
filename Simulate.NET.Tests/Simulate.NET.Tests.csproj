@@ -8,7 +8,7 @@
     <ProjectGuid>{D18CF022-1A98-4E99-BFBB-7789033E06D0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Simulate.NET.Tests</RootNamespace>
+    <RootNamespace>Simulate.NET</RootNamespace>
     <AssemblyName>Simulate.NET.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\ArrayExtensionsTests.cs" />
+    <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
