@@ -16,13 +16,13 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 
-using Basics.NET;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Basics;
 
-namespace Simulate.NET.Collections
+namespace Simulate.Collections
 {
     /// <summary>
     /// Provides a priority queue implementation based on a priority heap. This class cannot be inherited.

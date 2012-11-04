@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
-namespace Basics.NET
+namespace Basics
 {
     /// <summary>
     /// Provides utility methods for guarding parameters. This class is <see langword="static"/>.

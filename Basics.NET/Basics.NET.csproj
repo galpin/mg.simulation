@@ -8,7 +8,7 @@
     <ProjectGuid>{97A80A0F-3101-44B7-9821-CF8D81080296}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Basics.NET</RootNamespace>
+    <RootNamespace>Basics</RootNamespace>
     <AssemblyName>Basics.NET</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

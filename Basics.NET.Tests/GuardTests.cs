@@ -18,7 +18,7 @@
 using System;
 using Xunit;
 
-namespace Basics.NET.Tests
+namespace Basics
 {
     public class GuardTests
     {

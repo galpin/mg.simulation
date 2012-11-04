@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-using Basics.NET;
+using Basics;
 
-namespace Simulate.NET.Collections
+namespace Simulate.Collections
 {
     /// <summary>
     /// Provides extension methods for arrays. This class is <see langword="static"/>.

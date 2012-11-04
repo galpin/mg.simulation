@@ -8,7 +8,7 @@
     <ProjectGuid>{09A3008D-B206-421B-932F-544A42536FDC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Basics.NET.Tests</RootNamespace>
+    <RootNamespace>Basics</RootNamespace>
     <AssemblyName>Basics.NET.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

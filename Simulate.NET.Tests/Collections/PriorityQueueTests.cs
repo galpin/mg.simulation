@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Simulate.NET.Collections
+namespace Simulate.Collections
 {
     public class PriorityQueueTests
     {
