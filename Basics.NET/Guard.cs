@@ -30,6 +30,39 @@ namespace Basics
         #region Public Methods
 
         /// <summary>
+        /// Throws an <see cref="System.ArgumentOutOfRangeException"/> if a specified condition is not <see langword="true"/>.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <param name="parameterFunc">
+        /// A function that gets the name of the parameter to check (referenced in the exception message).
+        /// </param>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// Thrown when <paramref name="condition"/> is not <see langword="true"/>.
+        /// </exception>
+        public static void IsInRange<T>(bool condition, Expression<Func<T>> parameterFunc)
+        {
+            IsInRange(condition, GetParameterName(parameterFunc));
+        }
+
+        /// <summary>
+        /// Throws an <see cref="System.ArgumentOutOfRangeException"/> if a specified condition is not <see langword="true"/>.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <param name="parameter">
+        /// The name of the parameter to check (referenced in the exception message).
+        /// </param>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// Thrown when <paramref name="condition"/> is not <see langword="true"/>.
+        /// </exception>
+        public static void IsInRange(bool condition, string parameter)
+        {
+            if (!condition)
+            {
+                throw new ArgumentOutOfRangeException(parameter);
+            }
+        }
+
+        /// <summary>
         /// Throws an <see cref="System.ArgumentNullException"/> if <paramref name="obj"/> is <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="obj"/>.</typeparam>
@@ -61,39 +94,6 @@ namespace Basics
             if (obj == null)
             {
                 throw new ArgumentNullException(parameter);
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="System.ArgumentOutOfRangeException"/> if a specified condition is not <see langword="true"/>.
-        /// </summary>
-        /// <param name="condition">The condition.</param>
-        /// <param name="parameterFunc">
-        /// A function that gets the name of the parameter to check (referenced in the exception message).
-        /// </param>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        /// Thrown when <paramref name="condition"/> is not <see langword="true"/>.
-        /// </exception>
-        public static void IsInRange<T>(bool condition, Expression<Func<T>> parameterFunc)
-        {
-            IsInRange(condition, GetParameterName(parameterFunc));
-        }
-
-        /// <summary>
-        /// Throws an <see cref="System.ArgumentOutOfRangeException"/> if a specified condition is not <see langword="true"/>.
-        /// </summary>
-        /// <param name="condition">The condition.</param>
-        /// <param name="parameter">
-        /// The name of the parameter to check (referenced in the exception message).
-        /// </param>
-        /// <exception cref="System.ArgumentOutOfRangeException">
-        /// Thrown when <paramref name="condition"/> is not <see langword="true"/>.
-        /// </exception>
-        public static void IsInRange(bool condition, string parameter)
-        {
-            if (!condition)
-            {
-                throw new ArgumentOutOfRangeException(parameter);
             }
         }
 

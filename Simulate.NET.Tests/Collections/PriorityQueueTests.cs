@@ -28,6 +28,46 @@ namespace Simulate.Collections
         #region Public Methods
 
         [Fact]
+        public void CopyTo_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(Enumerable.Range(0, 100));
+            var destinationArray = new int[priorityQueue.Count];
+
+            priorityQueue.CopyTo(destinationArray, 0);
+
+            Assert.Equal(priorityQueue, destinationArray);
+        }
+
+        [Fact]
+        public void CopyTo_CanStartCopyingAtSpecificIndex_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(Enumerable.Range(0, 100));
+            var destinationArray = new int[priorityQueue.Count + 1];
+
+            priorityQueue.CopyTo(destinationArray, 1);
+
+            Assert.Equal(priorityQueue, destinationArray.Skip(1));
+        }
+
+        [Fact]
+        public void CopyTo_ThrowsIfArrayIsNull_Test()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PriorityQueue<int>().CopyTo(null, 0));
+        }
+
+        [Fact]
+        public void CopyTo_ThrowsIfIndexIsLessThanZero_Test()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>().CopyTo(new object[0], -1));
+        }
+
+        [Fact]
+        public void CopyTo_ThrowsIfTheNumberOfElementsInTheQueueIsGreaterThanSpaceAvailableFromArrayIndexToTheEndOfArray_Test()
+        {
+            Assert.Throws<ArgumentException>(() => new PriorityQueue<int>(new[] { 1, 2, 3 }).CopyTo(new int[3], 1));
+        }
+
+        [Fact]
         public void Ctor_WithNoArguments_CreatesEmptyQueue_Test()
         {
             Assert.Empty(new PriorityQueue<int>());
@@ -95,68 +135,10 @@ namespace Simulate.Collections
         }
 
         [Fact]
-        public void CopyTo_Test()
+        public void Count_Test()
         {
-            var priorityQueue = new PriorityQueue<int>(Enumerable.Range(0, 100));
-            var destinationArray = new int[priorityQueue.Count];
-
-            priorityQueue.CopyTo(destinationArray, 0);
-
-            Assert.Equal(priorityQueue, destinationArray);
-        }
-
-        [Fact]
-        public void CopyTo_CanStartCopyingAtSpecificIndex_Test()
-        {
-            var priorityQueue = new PriorityQueue<int>(Enumerable.Range(0, 100));
-            var destinationArray = new int[priorityQueue.Count + 1];
-
-            priorityQueue.CopyTo(destinationArray, 1);
-
-            Assert.Equal(priorityQueue, destinationArray.Skip(1));
-        }
-
-        [Fact]
-        public void CopyTo_ThrowsIfArrayIsNull_Test()
-        {
-            Assert.Throws<ArgumentNullException>(() => new PriorityQueue<int>().CopyTo(null, 0));
-        }
-
-        [Fact]
-        public void CopyTo_ThrowsIfIndexIsLessThanZero_Test()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>().CopyTo(new object[0], -1));
-        }
-
-        [Fact]
-        public void CopyTo_ThrowsIfTheNumberOfElementsInTheQueueIsGreaterThanSpaceAvailableFromArrayIndexToTheEndOfArray_Test()
-        {
-            Assert.Throws<ArgumentException>(() => new PriorityQueue<int>(new[] {1, 2, 3}).CopyTo(new int[3], 1));
-        }
-
-        [Fact]
-        public void Enqueue_Test()
-        {
-            var priorityQueue = new PriorityQueue<int>();
-
-            priorityQueue.Enqueue(1);
-            priorityQueue.Enqueue(2);
-            priorityQueue.Enqueue(3);
-
-            Assert.Equal(3, priorityQueue.Count);
-            AssertDequeue(priorityQueue, expectedDequeueOrder:new[] {3,2,1});
-        }
-
-        [Fact]
-        public void Enqueue_CanEnqueueItemsPastInitialCapacity_Test()
-        {
-            var initialCapacity = 10;
-            var priorityQueue = new PriorityQueue<int>(initialCapacity);
-            
-            for (int i = 0; i < initialCapacity * 2; i++)
-            {
-                priorityQueue.Enqueue(i);    
-            }
+            Assert.Equal(0, new PriorityQueue<int>().Count);
+            Assert.Equal(5, new PriorityQueue<int>(new[] { 1, 2, 3, 4, 5 }).Count);
         }
 
         [Fact]
@@ -171,6 +153,31 @@ namespace Simulate.Collections
         public void Dequeue_ThrowsIfPriorityQueueIsEmpty_Test()
         {
             Assert.Throws<InvalidOperationException>(() => new PriorityQueue<int>().Dequeue());
+        }
+
+        [Fact]
+        public void Enqueue_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>();
+
+            priorityQueue.Enqueue(1);
+            priorityQueue.Enqueue(2);
+            priorityQueue.Enqueue(3);
+
+            Assert.Equal(3, priorityQueue.Count);
+            AssertDequeue(priorityQueue, expectedDequeueOrder: new[] { 3, 2, 1 });
+        }
+
+        [Fact]
+        public void Enqueue_CanEnqueueItemsPastInitialCapacity_Test()
+        {
+            var initialCapacity = 10;
+            var priorityQueue = new PriorityQueue<int>(initialCapacity);
+
+            for (int i = 0; i < initialCapacity * 2; i++)
+            {
+                priorityQueue.Enqueue(i);
+            }
         }
 
         [Fact]
@@ -257,22 +264,6 @@ namespace Simulate.Collections
         #region Public Methods
 
         [Fact]
-        public void GetEnumerator_Test()
-        {
-            var inputSequence = new[] { 1, 2, 3, 4, 5 };
-            var priorityQueue = new PriorityQueue<int>(inputSequence);
-            using (var enumerator = priorityQueue.GetEnumerator())
-            {
-                var index = inputSequence.Length;
-                while (enumerator.MoveNext())
-                {
-                    Assert.Equal(inputSequence[--index], enumerator.Current);
-                }
-                Assert.False(enumerator.MoveNext());    
-            }
-        }
-
-        [Fact]
         public void Current_ThrowsIfRequestedBeforeMoveNext_Test()
         {
             Assert.Throws<InvalidOperationException>(() => new PriorityQueue<int>().GetEnumerator().Current);
@@ -286,6 +277,34 @@ namespace Simulate.Collections
             {
                 enumerator.MoveNext();
                 Assert.Same(enumerator.Current, enumerator.Current);    
+            }
+        }
+
+        [Fact]
+        public void GetEnumerator_Test()
+        {
+            var inputSequence = new[] { 1, 2, 3, 4, 5 };
+            var priorityQueue = new PriorityQueue<int>(inputSequence);
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                var index = inputSequence.Length;
+                while (enumerator.MoveNext())
+                {
+                    Assert.Equal(inputSequence[--index], enumerator.Current);
+                }
+                Assert.False(enumerator.MoveNext());
+            }
+        }
+
+
+        [Fact]
+        public void MoveNext_ThrowsIfCollectionIsModified_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(new[] { 1, 2 });
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                priorityQueue.Enqueue(3);
+                Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
             }
         }
 
@@ -306,17 +325,6 @@ namespace Simulate.Collections
                 enumerate();
                 enumerator.Reset();
                 enumerate();    
-            }
-        }
-
-        [Fact]
-        public void MoveNext_ThrowsIfCollectionIsModified_Test()
-        {
-            var priorityQueue = new PriorityQueue<int>(new[] {1, 2});
-            using (var enumerator = priorityQueue.GetEnumerator())
-            {
-                priorityQueue.Enqueue(3);
-                Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());        
             }
         }
 

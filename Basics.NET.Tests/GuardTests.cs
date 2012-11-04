@@ -25,22 +25,6 @@ namespace Basics
         #region Public Methods
 
         [Fact]
-        public void IsNotNull_ThrowsIfParameterIsNull_Test()
-        {
-            object obj = null;
-            Assert.Throws<ArgumentNullException>(() => Guard.IsNotNull(obj, () => obj));
-            Assert.Throws<ArgumentNullException>(() => Guard.IsNotNull(obj, "obj"));
-        }
-
-        [Fact]
-        public void IsNotNull_DoesNotThrowIfParameterIsNotNull_Test()
-        {
-            var obj = new object();
-            Assert.DoesNotThrow(() => Guard.IsNotNull(obj, () => obj));
-            Assert.DoesNotThrow(() => Guard.IsNotNull(obj, "obj"));
-        }
-
-        [Fact]
         public void IsInRange_ThrowsIfParameterIsNotWithinRange_Test()
         {
             int param = 0;
@@ -54,6 +38,22 @@ namespace Basics
             int param = 10;
             Assert.DoesNotThrow(() => Guard.IsInRange(param > 0, () => param));
             Assert.DoesNotThrow(() => Guard.IsInRange(param > 0, "param"));
+        }
+
+        [Fact]
+        public void IsNotNull_ThrowsIfParameterIsNull_Test()
+        {
+            object obj = null;
+            Assert.Throws<ArgumentNullException>(() => Guard.IsNotNull(obj, () => obj));
+            Assert.Throws<ArgumentNullException>(() => Guard.IsNotNull(obj, "obj"));
+        }
+
+        [Fact]
+        public void IsNotNull_DoesNotThrowIfParameterIsNotNull_Test()
+        {
+            var obj = new object();
+            Assert.DoesNotThrow(() => Guard.IsNotNull(obj, () => obj));
+            Assert.DoesNotThrow(() => Guard.IsNotNull(obj, "obj"));
         }
 
         [Fact]

@@ -354,33 +354,6 @@ namespace Simulate.Collections
 
         #region Private Methods
 
-        private void Swim(int k)
-        {
-            while (k > 1 && IsLess(k / 2, k))
-            {
-                _heap.Swap(k, k / 2);
-                k = k / 2;
-            }
-        }
-
-        private void Sink(int k)
-        {
-            int j;
-            while ((j = 2 * k) <= _N)
-            {
-                if (j < _N && IsLess(j, j + 1))
-                {
-                    j++;
-                }
-                if (!IsLess(k, j))
-                {
-                    break;
-                }
-                _heap.Swap(k, j);
-                k = j;
-            }
-        }
-
         private bool IsHeap(int k)
         {
             if (k > _N)
@@ -416,11 +389,30 @@ namespace Simulate.Collections
             _version++;
         }
 
-        private void VerifyNotEmpty()
+        private void Swim(int k)
         {
-            if (_N == 0)
+            while (k > 1 && IsLess(k / 2, k))
             {
-                throw new InvalidOperationException();
+                _heap.Swap(k, k / 2);
+                k = k / 2;
+            }
+        }
+
+        private void Sink(int k)
+        {
+            int j;
+            while ((j = 2 * k) <= _N)
+            {
+                if (j < _N && IsLess(j, j + 1))
+                {
+                    j++;
+                }
+                if (!IsLess(k, j))
+                {
+                    break;
+                }
+                _heap.Swap(k, j);
+                k = j;
             }
         }
 
@@ -429,6 +421,14 @@ namespace Simulate.Collections
 #if DEBUG
             Debug.Assert(IsHeap(1));
 #endif
+        }
+
+        private void VerifyNotEmpty()
+        {
+            if (_N == 0)
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         #endregion
