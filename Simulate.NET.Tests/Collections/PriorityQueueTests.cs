@@ -16,6 +16,7 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -94,6 +95,46 @@ namespace Simulate.Collections
         }
 
         [Fact]
+        public void CopyTo_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(Enumerable.Range(0, 100));
+            var destinationArray = new int[priorityQueue.Count];
+
+            priorityQueue.CopyTo(destinationArray, 0);
+
+            Assert.Equal(priorityQueue, destinationArray);
+        }
+
+        [Fact]
+        public void CopyTo_CanStartCopyingAtSpecificIndex_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(Enumerable.Range(0, 100));
+            var destinationArray = new int[priorityQueue.Count + 1];
+
+            priorityQueue.CopyTo(destinationArray, 1);
+
+            Assert.Equal(priorityQueue, destinationArray.Skip(1));
+        }
+
+        [Fact]
+        public void CopyTo_ThrowsIfArrayIsNull_Test()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PriorityQueue<int>().CopyTo(null, 0));
+        }
+
+        [Fact]
+        public void CopyTo_ThrowsIfIndexIsLessThanZero_Test()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>().CopyTo(new object[0], -1));
+        }
+
+        [Fact]
+        public void CopyTo_ThrowsIfTheNumberOfElementsInTheQueueIsGreaterThanSpaceAvailableFromArrayIndexToTheEndOfArray_Test()
+        {
+            Assert.Throws<ArgumentException>(() => new PriorityQueue<int>(new[] {1, 2, 3}).CopyTo(new int[3], 1));
+        }
+
+        [Fact]
         public void Enqueue_Test()
         {
             var priorityQueue = new PriorityQueue<int>();
@@ -127,9 +168,21 @@ namespace Simulate.Collections
         }
 
         [Fact]
+        public void Dequeue_ThrowsIfPriorityQueueIsEmpty_Test()
+        {
+            Assert.Throws<InvalidOperationException>(() => new PriorityQueue<int>().Dequeue());
+        }
+
+        [Fact]
+        public void IsSynchronized_Test()
+        {
+            Assert.False(((ICollection)new PriorityQueue<int>()).IsSynchronized);
+        }
+
+        [Fact]
         public void Peek_Test()
         {
-            var priorityQueue = new PriorityQueue<string>(new[] {"aaa", "bbb", "ccc"});
+            var priorityQueue = new PriorityQueue<string>(new[] { "aaa", "bbb", "ccc" });
 
             Assert.Equal("ccc", priorityQueue.Peek());
             priorityQueue.Dequeue();
@@ -139,15 +192,16 @@ namespace Simulate.Collections
         }
 
         [Fact]
-        public void Dequeue_ThrowsIfPriorityQueueIsEmpty_Test()
-        {
-            Assert.Throws<InvalidOperationException>(() => new PriorityQueue<int>().Dequeue());
-        }
-
-        [Fact]
         public void Peek_ThrowsIfPriorityQueueIsEmpty_Test()
         {
             Assert.Throws<InvalidOperationException>(() => new PriorityQueue<int>().Peek());
+        }
+
+        [Fact]
+        public void SyncRoot_Test()
+        {
+            ICollection priorityQueue = new PriorityQueue<int>();
+            Assert.Same(priorityQueue.SyncRoot, priorityQueue.SyncRoot);
         }
 
         [Fact]

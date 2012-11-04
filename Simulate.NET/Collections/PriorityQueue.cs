@@ -33,7 +33,7 @@ namespace Simulate.Collections
     /// 
     /// This collection is not thread-safe.
     /// </remarks>
-    public sealed class PriorityQueue<T> : IEnumerable<T>
+    public sealed class PriorityQueue<T> : IEnumerable<T>, ICollection
     {
         #region Declarations
 
@@ -67,6 +67,11 @@ namespace Simulate.Collections
         /// </summary>
         private int _version;
 
+        /// <summary>
+        /// An object that can be used to synchronize access to the <see cref="ICollection"/>. This field is read-only.
+        /// </summary>
+        private readonly object _syncRoot = new object();
+
         #endregion
 
         #region Constructors
@@ -85,7 +90,8 @@ namespace Simulate.Collections
         /// <summary>
         /// Creates a new instance of <see cref="PriorityQueue{T}"/> with the specified comparer.
         /// </summary>
-        /// <param name="comparer">The comparer to use.</param>
+        /// <param name="comparer">
+        /// The comparer to use.</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if <paramref name="comparer"/> is <see langword="null"/>.
         /// </exception>
@@ -97,7 +103,9 @@ namespace Simulate.Collections
         /// <summary>
         /// Creates a new instance of <see cref="PriorityQueue{T}"/> with the specified initial capacity.
         /// </summary>
-        /// <param name="initialCapacity">The initial capacity.</param>
+        /// <param name="initialCapacity">
+        /// The initial capacity.
+        /// </param>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown if <paramref name="initialCapacity"/> is less than to equal to zero.
         /// </exception>
@@ -128,8 +136,12 @@ namespace Simulate.Collections
         /// <summary>
         /// Creates a new instance of <see cref="PriorityQueue{T}"/> with the specified initial capacity and comparer.
         /// </summary>
-        /// <param name="initialCapacity">The initial capacity.</param>
-        /// <param name="comparer">The comparer to use.</param>
+        /// <param name="initialCapacity">
+        /// The initial capacity.
+        /// </param>
+        /// <param name="comparer">
+        /// The comparer to use.
+        /// </param>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown if <paramref name="initialCapacity"/> is less than to equal to zero.
         /// </exception>
@@ -152,7 +164,9 @@ namespace Simulate.Collections
         /// <param name="source">
         /// The collection whose elements are copied to the new <see cref="PriorityQueue{T}"/>.
         /// </param>
-        /// <param name="comparer">The comparer to use.</param>
+        /// <param name="comparer">
+        /// The comparer to use.
+        /// </param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown if <paramref name="source"/> or <paramref name="comparer"/> is <see langword="null"/>.
         /// </exception>
@@ -180,14 +194,64 @@ namespace Simulate.Collections
             get { return _N; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether access to the <see cref="ICollection"/> is synchronized (thread safe).
+        /// </summary>
+        /// <returns>
+        /// <see langword="true"/> if access to the collection is synchronized; otherwise <see langword="false"/>.
+        /// This property always returns false.
+        /// </returns>
+        bool ICollection.IsSynchronized
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Gets an object that can be used to synchronize access to the <see cref="ICollection"/>.
+        /// </summary>
+        object ICollection.SyncRoot
+        {
+            get { return _syncRoot; }
+        }
+
         #endregion
 
         #region Public Methods
 
         /// <summary>
+        /// Copies the <see cref="PriorityQueue{T}"/> to an existing one-dimensional <see cref="Array"/>, started at
+        /// the specified array index.
+        /// </summary>
+        /// <param name="array">
+        /// The one-dimensional array that is the destination of the elements.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based starting index in <paramref name="array"/> at which copying begins.
+        /// </param>
+        /// <remarks>
+        /// The elements are copied to the <see cref="Array"/> in the same order in which the enumerator iterates
+        /// through the <see cref="PriorityQueue{T}"/>.
+        /// 
+        /// This method is an O(n) operation, where n is <see cref="Count"/>.
+        /// </remarks>
+        public void CopyTo(Array array, int index)
+        {
+            Guard.IsNotNull(array, () => array);
+            Guard.IsInRange(index >= 0, () => index);
+            Guard.IsTrue(array.Length - index >= Count, () => index);
+            
+            foreach (var item in this)
+            {
+                array.SetValue(item, index++);
+            }
+        }
+
+        /// <summary>
         /// Adds an item.
         /// </summary>
-        /// <param name="item">The item.</param>
+        /// <param name="item">
+        /// The item.
+        /// </param>
         /// <remarks>
         /// If <see cref="Count"/> already equals the capacity, the capacity of the <see cref="PriorityQueue{T}"/> is
         /// increased by automatically reallocating the internal array and the existing elements are copied to the new
@@ -269,11 +333,18 @@ namespace Simulate.Collections
             }
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the <see cref="PriorityQueue{T}"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="PriorityQueue{T}.Enumerator"/> for the <see cref="PriorityQueue{T}"/>.
+        /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
             return new Enumerator(this);
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -349,7 +420,7 @@ namespace Simulate.Collections
         {
             if (_N == 0)
             {
-                throw new InvalidOperationException("Queue empty.");
+                throw new InvalidOperationException();
             }
         }
 
@@ -365,7 +436,7 @@ namespace Simulate.Collections
         #region Enumerator
 
         [Serializable]
-        private class Enumerator : IEnumerator<T>
+        public class Enumerator : IEnumerator<T>
         {
             #region Declarations
             
@@ -381,7 +452,8 @@ namespace Simulate.Collections
             #endregion
 
             #region Properties
-   
+
+            /// <inheritdoc/>
             public T Current
             {
                 get
@@ -394,6 +466,7 @@ namespace Simulate.Collections
                 }
             }
 
+            /// <inheritdoc/>
             object IEnumerator.Current
             {
                 get { return Current; }
@@ -415,12 +488,14 @@ namespace Simulate.Collections
 
             #region Public Methods
 
+            /// <inheritdoc/>
             public void Dispose()
             {
                 _index = NotStarted;
                 _current = default(T);
             }
 
+            /// <inheritdoc/>
             public bool MoveNext()
             {
                 VerifyNotChanged();
@@ -433,6 +508,7 @@ namespace Simulate.Collections
                 return canMoveNext;
             }
 
+            /// <inheritdoc/>
             public void Reset()
             {
                 VerifyNotChanged();
