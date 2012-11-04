@@ -219,7 +219,7 @@ namespace Simulate.Collections
         #region Public Methods
 
         /// <summary>
-        /// Copies the <see cref="PriorityQueue{T}"/> to an existing one-dimensional <see cref="Array"/>, started at
+        /// Copies the <see cref="PriorityQueue{T}"/> to an existing one-dimensional <see cref="Array"/>, starting at
         /// the specified array index.
         /// </summary>
         /// <param name="array">
