@@ -15,8 +15,10 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
+
 using Basics.NET;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -26,12 +28,10 @@ namespace Simulate.NET.Collections
     /// Provides a priority queue implementation based on a priority heap. This class cannot be inherited.
     /// </summary>
     /// <remarks>
-    /// This implementation uses a binary heap.
-    /// 
     /// Based on the priority queue implementation in <a href="http://algs4.cs.princeton.edu/24pq">Section 2.4</a> of
     /// <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
     /// </remarks>
-    public sealed class PriorityQueue<T>
+    public sealed class PriorityQueue<T> : IEnumerable<T>
     {
         #region Declarations
 
@@ -39,6 +39,11 @@ namespace Simulate.NET.Collections
         /// The default initial capacity. This field is constant.
         /// </summary>
         private const int _defaultInitialCapacity = 11;
+
+        /// <summary>
+        /// The number of items to expand the capacity by. This field is constant.
+        /// </summary>
+        private const int _growFactor = 4;
 
         /// <summary>
         /// The type comparer used to determine priority. This field is read-only.
@@ -54,6 +59,11 @@ namespace Simulate.NET.Collections
         /// The number of items in the heap.
         /// </summary>
         private int _N;
+
+        /// <summary>
+        /// The internal queue version. This is used to determine whether the queue has changed during enumeration.
+        /// </summary>
+        private int _version;
 
         #endregion
 
@@ -126,11 +136,10 @@ namespace Simulate.NET.Collections
         /// </exception>
         public PriorityQueue(int initialCapacity, IComparer<T> comparer)
         {
-            Guard.IsInRange(initialCapacity > 0, () => initialCapacity);
+            Guard.IsInRange(initialCapacity >= 0, () => initialCapacity);
             Guard.IsNotNull(comparer, () => comparer);
 
             _heap = new T[initialCapacity + 1];
-            _N = 0;
             _comparer = comparer;
         }
 
@@ -189,10 +198,11 @@ namespace Simulate.NET.Collections
         {
             if (_N == _heap.Length - 1)
             {
-                SetCapacity(_N + 4);
+                SetCapacity(_N + _growFactor);
             }
             _heap[++_N] = item;
             Swim(_N);
+            _version++;
             VerifyHeap();
         }
 
@@ -216,6 +226,7 @@ namespace Simulate.NET.Collections
             _heap.Swap(1, _N--);
             Sink(1);
             _heap[_N + 1] = default(T);
+            _version++;
             VerifyHeap();
             return item;
         }
@@ -254,6 +265,16 @@ namespace Simulate.NET.Collections
             {
                 SetCapacity(_N);
             }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion
@@ -306,7 +327,6 @@ namespace Simulate.NET.Collections
             return IsHeap(left) && IsHeap(right);
         }
 
-
         private bool IsLess(int i, int j)
         {
             return _comparer.Compare(_heap[i], _heap[j]) < 0;
@@ -320,6 +340,7 @@ namespace Simulate.NET.Collections
                 Array.Copy(_heap, 0, newHeap, 0, _N + 1);
             }
             _heap = newHeap;
+            _version++;
         }
 
         private void VerifyNotEmpty()
@@ -335,6 +356,112 @@ namespace Simulate.NET.Collections
 #if DEBUG
             Debug.Assert(IsHeap(1));
 #endif
+        }
+
+        #endregion
+
+        #region Enumerator
+
+        [Serializable]
+        private class Enumerator : IEnumerator<T>
+        {
+            #region Declarations
+            
+            private const int NotStarted = -1;
+
+            private readonly PriorityQueue<T> _priorityQueue;
+            private readonly int _version;
+
+            private PriorityQueue<T> _copy;
+            private int _index;
+            private T _current;
+
+            #endregion
+
+            #region Properties
+   
+            public T Current
+            {
+                get
+                {
+                    if (_index == NotStarted)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    return _current;
+                }
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            #endregion
+
+            #region Constructors
+
+            internal Enumerator(PriorityQueue<T> priorityQueue)
+            {
+                _priorityQueue = priorityQueue;
+                _version = priorityQueue._version;
+                _index = NotStarted;
+                CopyFromSource();
+            }
+
+            #endregion
+
+            #region Public Methods
+
+            public void Dispose()
+            {
+                _index = NotStarted;
+                _current = default(T);
+            }
+
+            public bool MoveNext()
+            {
+                VerifyNotChanged();
+
+                var canMoveNext = ++_index < _priorityQueue.Count;
+                if (canMoveNext)
+                {
+                    _current = _copy.Dequeue();
+                }
+                return canMoveNext;
+            }
+
+            public void Reset()
+            {
+                VerifyNotChanged();
+
+                _index = NotStarted;
+                _current = default(T);
+                CopyFromSource();
+            } 
+
+            #endregion
+
+            #region Private Methods
+
+            private void CopyFromSource()
+            {
+                _copy = new PriorityQueue<T>(_priorityQueue.Count)
+                {
+                    _N = _priorityQueue._N
+                };
+                Array.Copy(_priorityQueue._heap, 1, _copy._heap, 1, _priorityQueue.Count);
+            }
+
+            private void VerifyNotChanged()
+            {
+                if (_priorityQueue._version != _version)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+
+            #endregion
         }
 
         #endregion

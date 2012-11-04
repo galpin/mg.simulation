@@ -29,7 +29,7 @@ namespace Simulate.NET.Collections
         [Fact]
         public void Ctor_WithNoArguments_CreatesEmptyQueue_Test()
         {
-            //Assert.Empty(new PriorityQueue<int>());
+            Assert.Empty(new PriorityQueue<int>());
         }
 
         [Fact]
@@ -41,22 +41,22 @@ namespace Simulate.NET.Collections
         [Fact]
         public void Ctor_WithEnumerable_CopiesElementsFromGivenSequence_Test()
         {
-            //var expectedSequence = new[] {1, 2, 3, 4, 5};
-            //Assert.Equal(expectedSequence, new PriorityQueue<int>(expectedSequence));
+            var expectedSequence = new[] {5, 4, 3, 2, 1};
+            Assert.Equal(expectedSequence, new PriorityQueue<int>(expectedSequence));
         }
 
         [Fact]
-        public void Ctor_WithCapacity_ThrowsIfCapacityIsZeroOrNegative_Test()
+        public void Ctor_WithCapacity_ThrowsIfCapacityIsLessThanZero_Test()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>(0));
             Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>(-1));
+            Assert.DoesNotThrow(() => new PriorityQueue<int>(0));
         }
 
         [Fact]
-        public void Ctor_WithCapacityAndComparer_ThrowsIfCapacityIsZeroOrNegative_Test()
+        public void Ctor_WithCapacityAndComparer_ThrowsIfCapacityIsLessThanZero_Test()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>(0, Comparer<int>.Default));
             Assert.Throws<ArgumentOutOfRangeException>(() => new PriorityQueue<int>(-1, Comparer<int>.Default));
+            Assert.DoesNotThrow(() => new PriorityQueue<int>(0, Comparer<int>.Default));
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace Simulate.NET.Collections
             {
                 Assert.Equal(expectedValue, queue.Dequeue());
             }
-            //Assert.Empty(queue);
+            Assert.Empty(queue);
         }
 
         #endregion
@@ -192,6 +192,88 @@ namespace Simulate.NET.Collections
             public int Compare(T x, T y)
             {
                 return Comparer<T>.Default.Compare(x, y) * -1;
+            }
+        }
+
+        #endregion
+    }
+
+    public class PriorityQueueEnumeratorTests
+    {
+        #region Public Methods
+
+        [Fact]
+        public void GetEnumerator_Test()
+        {
+            var inputSequence = new[] { 1, 2, 3, 4, 5 };
+            var priorityQueue = new PriorityQueue<int>(inputSequence);
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                var index = inputSequence.Length;
+                while (enumerator.MoveNext())
+                {
+                    Assert.Equal(inputSequence[--index], enumerator.Current);
+                }
+                Assert.False(enumerator.MoveNext());    
+            }
+        }
+
+        [Fact]
+        public void Current_ThrowsIfRequestedBeforeMoveNext_Test()
+        {
+            Assert.Throws<InvalidOperationException>(() => new PriorityQueue<int>().GetEnumerator().Current);
+        }
+
+        [Fact]
+        public void Current_DoesNotMovePositionOfEnumerator_Test()
+        {
+            var priorityQueue = new PriorityQueue<string>(new[] { "a", "b" });
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                enumerator.MoveNext();
+                Assert.Same(enumerator.Current, enumerator.Current);    
+            }
+        }
+
+        [Fact]
+        public void Reset_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(new[] {1, 2});
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                Action enumerate = () =>
+                {
+                    enumerator.MoveNext();
+                    Assert.Equal(2, enumerator.Current);
+                    enumerator.MoveNext();
+                    Assert.Equal(1, enumerator.Current);
+                    Assert.False(enumerator.MoveNext());
+                };
+                enumerate();
+                enumerator.Reset();
+                enumerate();    
+            }
+        }
+
+        [Fact]
+        public void MoveNext_ThrowsIfCollectionIsModified_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(new[] {1, 2});
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                priorityQueue.Enqueue(3);
+                Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());        
+            }
+        }
+
+        [Fact]
+        public void Reset_ThrowsIfCollectionIsModified_Test()
+        {
+            var priorityQueue = new PriorityQueue<int>(new[] {1, 2});
+            using (var enumerator = priorityQueue.GetEnumerator())
+            {
+                priorityQueue.Enqueue(3);
+                Assert.Throws<InvalidOperationException>(() => enumerator.Reset());
             }
         }
 
