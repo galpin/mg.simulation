@@ -97,6 +97,39 @@ namespace Basics
             }
         }
 
+        /// <summary>
+        /// Throws an <see cref="System.ArgumentException"/> if a specified condition is not <see langword="true"/>.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <param name="parameterFunc">
+        /// A function that gets the name of the parameter to check (referenced in the exception message).
+        /// </param>
+        /// <exception cref="System.ArgumentException">
+        /// Thrown when <paramref name="condition"/> is not <see langword="true"/>.
+        /// </exception>
+        public static void IsTrue<T>(bool condition, Expression<Func<T>> parameterFunc)
+        {
+            IsTrue(condition, GetParameterName(parameterFunc));
+        }
+
+        /// <summary>
+        /// Throws an <see cref="System.ArgumentException"/> if a specified condition is not <see langword="true"/>.
+        /// </summary>
+        /// <param name="condition">The condition.</param>
+        /// <param name="parameter">
+        /// The name of the parameter to check (referenced in the exception message).
+        /// </param>
+        /// <exception cref="System.ArgumentException">
+        /// Thrown when <paramref name="condition"/> is not <see langword="true"/>.
+        /// </exception>
+        public static void IsTrue(bool condition, string parameter)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(parameter);
+            }
+        }
+
         #endregion
 
         #region Private Methods

@@ -56,6 +56,22 @@ namespace Basics
             Assert.DoesNotThrow(() => Guard.IsInRange(param > 0, "param"));
         }
 
+        [Fact]
+        public void IsTrue_ThrowsIfConditionIsNotTrue_Test()
+        {
+            int param = 0;
+            Assert.Throws<ArgumentException>(() => Guard.IsTrue(param > 0, () => param));
+            Assert.Throws<ArgumentException>(() => Guard.IsTrue(param > 0, "param"));
+        }
+
+        [Fact]
+        public void IsIsRange_DoesNotThrowIfConditionIsTrue_Test()
+        {
+            int param = 10;
+            Assert.DoesNotThrow(() => Guard.IsTrue(param > 0, () => param));
+            Assert.DoesNotThrow(() => Guard.IsTrue(param > 0, "param"));
+        }
+
         #endregion
     }
 }
