@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Collections\ArrayExtensionsTests.cs" />
     <Compile Include="Collections\PriorityQueueTests.cs" />
+    <Compile Include="Events\EventTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
