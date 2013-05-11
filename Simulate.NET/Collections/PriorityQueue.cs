@@ -150,8 +150,8 @@ namespace Simulate.Collections
         /// </exception>
         public PriorityQueue(int initialCapacity, IComparer<T> comparer)
         {
-            Guard.IsInRange(initialCapacity >= 0, () => initialCapacity);
-            Guard.IsNotNull(comparer, () => comparer);
+            Guard.IsInRange(initialCapacity >= 0, "initialCapacity");
+            Guard.IsNotNull(comparer, "comparer");
 
             _heap = new T[initialCapacity + 1];
             _comparer = comparer;
@@ -173,8 +173,8 @@ namespace Simulate.Collections
         public PriorityQueue(IEnumerable<T> source, IComparer<T> comparer)
             : this(_defaultInitialCapacity, comparer)
         {
-            Guard.IsNotNull(source, () => source);
-            Guard.IsNotNull(comparer, () => comparer);
+            Guard.IsNotNull(source, "source");
+            Guard.IsNotNull(comparer, "comparer");
 
             foreach (var item in source)
             {
@@ -236,8 +236,8 @@ namespace Simulate.Collections
         /// </remarks>
         public void CopyTo(Array array, int index)
         {
-            Guard.IsNotNull(array, () => array);
-            Guard.IsInRange(index >= 0, () => index);
+            Guard.IsNotNull(array, "array");
+            Guard.IsInRange(index >= 0, "index");
             Guard.IsTrue(array.Length - index >= Count, () => index);
             
             foreach (var item in this)
