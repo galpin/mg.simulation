@@ -1,35 +1,35 @@
-﻿// Copyright (c) Sahara Force India Formula One Team 2013.
+﻿//// Copyright (c) Sahara Force India Formula One Team 2013.
 
-using System;
-using Xunit;
+//using System;
+//using Xunit;
 
-namespace Simulate.Events
-{
-    public class EventTests
-    {
-        #region Public Methods
+//namespace Simulate.Events
+//{
+//    public class EventTests
+//    {
+//        #region Public Methods
 
-        [Fact]
-        public void Ctor_CorrectlyInitialisesMembers_Test()
-        {
-            var expectedGeneratedOn = DateTime.UtcNow;
+//        [Fact]
+//        public void Ctor_CorrectlyInitialisesMembers_Test()
+//        {
+//            var expectedGeneratedOn = DateTime.UtcNow;
 
-            var actual = new StubEvent(expectedGeneratedOn);
+//            var actual = new StubEvent(expectedGeneratedOn);
 
-            Assert.Equal(expectedGeneratedOn, actual.GeneratedOn);
-        }
+//            Assert.Equal(expectedGeneratedOn, actual.GeneratedOn);
+//        }
 
-        #endregion
+//        #endregion
 
-        #region StubEvent
+//        #region StubEvent
 
-        private sealed class StubEvent : Event
-        {
-            public StubEvent(DateTime generatedOn) : base(generatedOn)
-            {
-            }
-        }
+//        private sealed class StubEvent : Event
+//        {
+//            public StubEvent(DateTime generatedOn) : base(generatedOn)
+//            {
+//            }
+//        }
 
-        #endregion
-    }
-}
+//        #endregion
+//    }
+//}
