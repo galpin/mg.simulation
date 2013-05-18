@@ -1,0 +1,47 @@
+<Project DefaultTargets="Compile"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    
+    <!-- Configuration. -->
+    <PropertyGroup>
+        <SolutionFile>src\Simulate.NET.sln</SolutionFile>
+        <OutputPath>.\bin\</OutputPath>
+        <DistPath>.\dist\</DistPath>
+        <TestAssembly>bin\Simulate.NET.Tests.dll</TestAssembly>
+        <BuildProperties>Configuration=Release;OutputPath=..\..\$(OutputPath)</BuildProperties>
+    </PropertyGroup>
+    
+    <!-- Compile. -->
+    <Target Name="Compile">
+        <MSBuild Projects="$(SolutionFile)" Properties="$(BuildProperties)" />
+    </Target>
+  
+    <!-- Clean. -->
+    <Target Name="Clean">
+        <MSBuild Projects="$(SolutionFile)" Targets="Clean" Properties="$(BuildProperties)" />
+        <RemoveDir Directories="$(OutputPath);$(DistPath)" />
+    </Target>
+    
+    <!-- Test. -->
+    <UsingTask
+        AssemblyFile="lib\Xunit\xunit.runner.msbuild.dll"
+        TaskName="Xunit.Runner.MSBuild.xunit"/>
+    <Target Name="Test" DependsOnTargets="Compile">
+        <xunit Assemblies="$(TestAssembly)" />
+    </Target>
+    
+    <!-- Package. -->
+    <Target Name="Package" DependsOnTargets="Compile;Test">
+        <MakeDir Directories="$(DistPath)" />
+        <Exec Command="lib\NuGet\NuGet.exe pack src\Simulate.NET\Simulate.NET.csproj -Properties $(BuildProperties) -OutputDirectory $(DistPath)" />
+    </Target>
+    
+    <!-- Deploy. -->
+    <ItemGroup>
+        <NuGetPackages Include="$(DistPath)*.nupkg" />
+    </ItemGroup>
+    <Target Name="Deploy" DependsOnTargets="Compile;Test;Package">
+        <MakeDir Directories="$(DistPath)" />
+        <Exec Command="lib\NuGet\NuGet.exe push @(NuGetPackages)" />
+    </Target>
+    
+</Project>
