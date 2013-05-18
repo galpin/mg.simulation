@@ -42,7 +42,7 @@ namespace Simulate
         }
 
         /// <summary>
-        /// Returns a task that runs until the specified time.
+        /// Returns a task that runs a simulation until the specified time.
         /// </summary>
         /// <param name="builder">
         /// The <see cref="SimulationBuilder"/>.
