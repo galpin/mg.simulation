@@ -141,57 +141,6 @@ namespace Simulate
 
         #endregion
 
-        #region EventVisitor
-
-        private sealed class EventVisitor : IEventVisitor
-        {
-            private readonly SimulationRunnerBase _runner;
-            private ScheduledEventEnumerator _enumerator;
-
-            public EventVisitor(SimulationRunnerBase runner)
-            {
-                _runner = runner;
-            }
-
-            public void Handle(ScheduledEventEnumerator enumerator)
-            {
-                _enumerator = enumerator;
-                _enumerator.Current.Accept(this);
-                _enumerator = null;
-            }
-
-            public void Visit(TimeoutEvent @event)
-            {
-                _runner.Enqueue(
-                    _runner.Environment.Now + @event.Delay,
-                    new ResumeEvent(_enumerator));
-            }
-        }
-
-        #endregion
-
-        #region ResumeEvent
-
-        private sealed class ResumeEvent : Event
-        {
-            private readonly IEnumerator<Event> _parent;
-
-            public ResumeEvent(IEnumerator<Event> parent)
-            {
-                _parent = parent;
-            }
-
-            public override IEnumerable<Event> Execute(SimulationEnvironment environment)
-            {
-                while (_parent.MoveNext())
-                {
-                    yield return _parent.Current;
-                }
-            }
-        } 
-
-        #endregion
-
         #region ScheduledEventEnumerator
 
         protected sealed class ScheduledEventEnumerator : IEnumerator<Event>, IComparable<ScheduledEventEnumerator>
@@ -249,6 +198,57 @@ namespace Simulate
                 return 0;
             }
         }
+
+        #endregion
+
+        #region EventVisitor
+
+        private sealed class EventVisitor : IEventVisitor
+        {
+            private readonly SimulationRunnerBase _runner;
+            private ScheduledEventEnumerator _enumerator;
+
+            public EventVisitor(SimulationRunnerBase runner)
+            {
+                _runner = runner;
+            }
+
+            public void Handle(ScheduledEventEnumerator enumerator)
+            {
+                _enumerator = enumerator;
+                _enumerator.Current.Accept(this);
+                _enumerator = null;
+            }
+
+            public void Visit(TimeoutEvent @event)
+            {
+                _runner.Enqueue(
+                    _runner.Environment.Now + @event.Delay,
+                    new ResumeEvent(_enumerator));
+            }
+        }
+
+        #endregion
+
+        #region ResumeEvent
+
+        private sealed class ResumeEvent : Event
+        {
+            private readonly IEnumerator<Event> _parent;
+
+            public ResumeEvent(IEnumerator<Event> parent)
+            {
+                _parent = parent;
+            }
+
+            public override IEnumerable<Event> Execute(SimulationEnvironment environment)
+            {
+                while (_parent.MoveNext())
+                {
+                    yield return _parent.Current;
+                }
+            }
+        } 
 
         #endregion
     }
