@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{500079
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulate.NET.Tests", "Simulate.NET.Tests\Simulate.NET.Tests.csproj", "{D18CF022-1A98-4E99-BFBB-7789033E06D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulate.Samples", "Simulate.Samples\Simulate.Samples.csproj", "{50D2F75E-36E3-4A21-B838-6A3216EFAC5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulate.NET.Samples", "Simulate.NET.Samples\Simulate.NET.Samples.csproj", "{50D2F75E-36E3-4A21-B838-6A3216EFAC5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
