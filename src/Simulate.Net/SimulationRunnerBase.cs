@@ -103,7 +103,7 @@ namespace Simulate
         #region Protected Methods
 
         /// <summary>
-        /// When overriden, returns a task that runs the simulation.
+        /// When overriden, runs the simulation.
         /// </summary>
         /// <param name="until">
         /// The time until which to run the simulation.
