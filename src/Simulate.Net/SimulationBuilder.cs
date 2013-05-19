@@ -31,7 +31,7 @@ namespace Simulate
  
         private readonly List<ProcessFactory> _processFactories;
         private readonly Func<SimulationEnvironment> _environmentFactory;
-        private Func<SimulationEnvironment, ISimulationRunner> _simulationRunnerFactory;
+        private readonly Func<SimulationEnvironment, ISimulationRunner> _simulationRunnerFactory;
 
         #endregion
 
@@ -95,23 +95,6 @@ namespace Simulate
                 Factory = factory,
                 ActiveAt = at ?? TimeSpan.Zero
             });
-            return this;
-        }
-
-        /// <summary>
-        /// Configures the simulation to run in approximate real-time.
-        /// </summary>
-        /// <param name="factor">
-        /// The factor by which to scale a simulation time step (default is <c>1.0</c>).
-        /// If a simulation step is from one to ten seconds and the factor is <c>0.5</c> then the
-        /// simulation step will take at least five seconds.
-        /// </param>
-        /// <returns>
-        /// This <see cref="SimulationBuilder"/>.
-        /// </returns>
-        public SimulationBuilder RunsInRealTime(double factor = 1.0)
-        {
-            _simulationRunnerFactory = environment => new SimulationRunnerRT(environment, factor);
             return this;
         }
 

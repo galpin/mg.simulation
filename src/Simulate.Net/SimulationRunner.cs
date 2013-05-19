@@ -16,15 +16,28 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Basics;
+using Simulate.Collections;
+using Simulate.Events;
 
 namespace Simulate
 {
     /// <summary>
     /// A default <see cref="ISimulationRunner"/> implementation. This class cannot be inherited.
     /// </summary>
-    public sealed class SimulationRunner : SimulationRunnerBase
+    public sealed class SimulationRunner : ISimulationRunner
     {
+        #region Declarations
+
+        private readonly EventVisitor _visitor;
+        private readonly SimulationEnvironment _environment;
+        private readonly PriorityQueue<ScheduledEventEnumerator> _events;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -37,20 +50,178 @@ namespace Simulate
         /// Thrown when <paramref name="environment"/> is <see langword="null"/>.
         /// </exception>
         public SimulationRunner(SimulationEnvironment environment)
-            : base(environment)
         {
+            Guard.IsNotNull(environment, "environment");
+
+            _environment = environment;
+            _visitor = new EventVisitor(this);
+            _events = new PriorityQueue<ScheduledEventEnumerator>();
         }
 
         #endregion
 
-        #region Constructors
+        #region Properties
+
+        /// <summary>
+        /// Gets the simulation environment.
+        /// </summary>
+        public SimulationEnvironment Environment
+        {
+            get { return _environment; }
+        }
+
+        #endregion
+
+        #region Public Methods
 
         /// <inheritdoc/>
-        protected override void RunCore(TimeSpan until)
+        public void Activate(TimeSpan at, Process process)
         {
-            while (Events.Any() && Environment.Now < until)
+            Guard.IsInRange(at >= TimeSpan.Zero, "at");
+            Guard.IsNotNull(process, "process");
+
+            Enqueue(at, process);
+        }
+
+        /// <inheritdoc/>
+        public void Run(TimeSpan until)
+        {
+            Guard.IsInRange(until >= TimeSpan.Zero, "until");
+
+            while (_events.Any() && Environment.Now < until)
             {
-                Step(Events.Dequeue());
+                Step();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void Step()
+        {
+            var @event = _events.Dequeue();
+            _environment.Now = @event.At;
+            if (@event.MoveNext())
+            {
+                _visitor.Handle(@event);
+            }
+        }
+
+        private void Enqueue(TimeSpan at, Event @event)
+        {
+            _events.Enqueue(new ScheduledEventEnumerator(
+                at,
+                @event.Execute(_environment).GetEnumerator()));
+        }
+
+        #endregion
+
+        #region ScheduledEventEnumerator
+
+        private sealed class ScheduledEventEnumerator : IEnumerator<Event>, IComparable<ScheduledEventEnumerator>
+        {
+            private readonly IEnumerator<Event> _executeEnumerator;
+            private readonly TimeSpan _at;
+
+            public ScheduledEventEnumerator(TimeSpan at, IEnumerator<Event> executeEnumerator)
+            {
+                _at = at;
+                _executeEnumerator = executeEnumerator;
+            }
+
+            public Event Current
+            {
+                get { return _executeEnumerator.Current; }
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            public TimeSpan At
+            {
+                get { return _at; }
+            }
+
+            public void Dispose()
+            {
+                _executeEnumerator.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                return _executeEnumerator.MoveNext();
+            }
+
+            public void Reset()
+            {
+                _executeEnumerator.Reset();
+            }
+
+            public int CompareTo(ScheduledEventEnumerator other)
+            {
+                if (At < other.At)
+                {
+                    return 1;
+                }
+                if (At > other.At)
+                {
+                    return -1;
+                }
+                return 0;
+            }
+        }
+
+        #endregion
+
+        #region EventVisitor
+
+        private sealed class EventVisitor : IEventVisitor
+        {
+            private readonly SimulationRunner _runner;
+            private ScheduledEventEnumerator _enumerator;
+
+            public EventVisitor(SimulationRunner runner)
+            {
+                _runner = runner;
+            }
+
+            public void Handle(ScheduledEventEnumerator enumerator)
+            {
+                _enumerator = enumerator;
+                _enumerator.Current.Accept(this);
+                _enumerator = null;
+            }
+
+            public void Visit(TimeoutEvent @event)
+            {
+                _runner.Enqueue(
+                    _runner.Environment.Now + @event.Delay,
+                    new ResumeEvent(_enumerator));
+            }
+        }
+
+        #endregion
+
+        #region ResumeEvent
+
+        private sealed class ResumeEvent : Event
+        {
+            private readonly IEnumerator<Event> _parent;
+
+            public ResumeEvent(IEnumerator<Event> parent)
+            {
+                _parent = parent;
+            }
+
+            public override IEnumerable<Event> Execute(SimulationEnvironment environment)
+            {
+                while (_parent.MoveNext())
+                {
+                    yield return _parent.Current;
+                }
             }
         } 
 
