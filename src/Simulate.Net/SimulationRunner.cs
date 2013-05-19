@@ -28,12 +28,12 @@ namespace Simulate
     /// <summary>
     /// A default <see cref="ISimulationRunner"/> implementation. This class cannot be inherited.
     /// </summary>
-    public sealed class SimulationRunner : ISimulationRunner
+    public sealed class SimulationRunner<TEnvironment> : ISimulationRunner<TEnvironment> where TEnvironment : SimulationEnvironment
     {
         #region Declarations
 
         private readonly EventVisitor _visitor;
-        private readonly SimulationEnvironment _environment;
+        private readonly TEnvironment _environment;
         private readonly PriorityQueue<ScheduledEventEnumerator> _events;
 
         #endregion
@@ -49,7 +49,7 @@ namespace Simulate
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="environment"/> is <see langword="null"/>.
         /// </exception>
-        public SimulationRunner(SimulationEnvironment environment)
+        public SimulationRunner(TEnvironment environment)
         {
             Guard.IsNotNull(environment, "environment");
 
@@ -75,7 +75,7 @@ namespace Simulate
         #region Public Methods
 
         /// <inheritdoc/>
-        public void Activate(TimeSpan at, Process process)
+        public void Activate(TimeSpan at, Process<TEnvironment> process)
         {
             Guard.IsInRange(at >= TimeSpan.Zero, "at");
             Guard.IsNotNull(process, "process");
@@ -108,7 +108,7 @@ namespace Simulate
             }
         }
 
-        private void Enqueue(TimeSpan at, Event @event)
+        private void Enqueue(TimeSpan at, Event<TEnvironment> @event)
         {
             _events.Enqueue(new ScheduledEventEnumerator(
                 at,
@@ -180,10 +180,10 @@ namespace Simulate
 
         private sealed class EventVisitor : IEventVisitor
         {
-            private readonly SimulationRunner _runner;
+            private readonly SimulationRunner<TEnvironment> _runner;
             private ScheduledEventEnumerator _enumerator;
 
-            public EventVisitor(SimulationRunner runner)
+            public EventVisitor(SimulationRunner<TEnvironment> runner)
             {
                 _runner = runner;
             }
@@ -207,7 +207,7 @@ namespace Simulate
 
         #region ResumeEvent
 
-        private sealed class ResumeEvent : Event
+        private sealed class ResumeEvent : Event<TEnvironment>
         {
             private readonly IEnumerator<Event> _parent;
 
@@ -216,7 +216,7 @@ namespace Simulate
                 _parent = parent;
             }
 
-            public override IEnumerable<Event> Execute(SimulationEnvironment environment)
+            public override IEnumerable<Event> Execute(TEnvironment environment)
             {
                 while (_parent.MoveNext())
                 {

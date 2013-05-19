@@ -6,15 +6,15 @@ using Simulate.Events;
 
 namespace Simulate.Samples.Clocks
 {
-    public class Clock : Process
+    public class Clock : Process<CustomSimulationEnvironment>
     {
         #region Declarations
 
-        public override IEnumerable<Event> Execute(SimulationEnvironment environment)
+        public override IEnumerable<Event> Execute(CustomSimulationEnvironment environment)
         {
             while (true)
             {
-                Console.WriteLine(environment.Now);
+                Console.WriteLine(environment.UtcNow());
                 yield return new TimeoutEvent(TimeSpan.FromSeconds(1));
             }
         } 

@@ -23,9 +23,23 @@ namespace Simulate
     /// <summary>
     /// Represents a simulation event. This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Event
+    public abstract class Event<TEnvironment> where TEnvironment : SimulationEnvironment
     {
         #region Public Methods
+
+        /// <summary>
+        /// Execute the event.
+        /// </summary>
+        /// <param name="environment">
+        /// The simulation environment in which to execute.
+        /// </param>
+        /// <returns>
+        /// An enumerable sequence of <see cref="Event"/>'s that are the result of this events execution.
+        /// </returns>
+        public virtual IEnumerable<Event> Execute(TEnvironment environment)
+        {
+            yield break;
+        }
 
         /// <summary>
         /// Accept an <see cref="IEventVisitor"/>.

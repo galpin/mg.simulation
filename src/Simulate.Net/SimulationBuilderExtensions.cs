@@ -33,7 +33,7 @@ namespace Simulate
         /// Thrown when <paramref name="until"/> is less than <see cref="TimeSpan.Zero"/> or 
         /// <paramref name="simulations"/> is less than zero.
         /// </exception>
-        public static Task SimulateAsync(this SimulationBuilder builder, TimeSpan until, int simulations)
+        public static Task SimulateAsync<TEnvironment>(this SimulationBuilder<TEnvironment> builder, TimeSpan until, int simulations) where TEnvironment : SimulationEnvironment
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
             Guard.IsInRange(simulations >= 0, "simulations");
@@ -59,7 +59,7 @@ namespace Simulate
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown when <paramref name="until"/> is less than <see cref="TimeSpan.Zero"/>.
         /// </exception>
-        public static Task SimulateAsync(this SimulationBuilder builder, TimeSpan until)
+        public static Task SimulateAsync<TEnvironment>(this SimulationBuilder<TEnvironment> builder, TimeSpan until) where TEnvironment : SimulationEnvironment
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
 

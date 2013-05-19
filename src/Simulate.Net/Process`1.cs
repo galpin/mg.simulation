@@ -20,7 +20,7 @@ namespace Simulate
     /// <summary>
     /// Represents a simulated process. This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Process : Event<SimulationEnvironment>
+    public abstract class Process<TEnvironment> : Event<TEnvironment> where TEnvironment : SimulationEnvironment
     {
     }
 }

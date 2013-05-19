@@ -22,7 +22,7 @@ namespace Simulate
     /// <summary>
     /// Represents a mechanism for running a simulation.
     /// </summary>
-    public interface ISimulationRunner
+    public interface ISimulationRunner<TEnvironment> where TEnvironment : SimulationEnvironment
     {
         #region Public Methods
 
@@ -41,7 +41,7 @@ namespace Simulate
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="process"/> is <see langword="null"/>.
         /// </exception>
-        void Activate(TimeSpan at, Process process);
+        void Activate(TimeSpan at, Process<TEnvironment> process);
 
         /// <summary>
         /// Run the simulation.
