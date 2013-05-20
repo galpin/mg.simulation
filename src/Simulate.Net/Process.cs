@@ -21,7 +21,7 @@ namespace Simulate
     /// Represents a simulated process that executes within a <see cref="SimulationEnvironment"/>.
     /// This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Process : Event<SimulationEnvironment>
+    public abstract class Process : Process<SimulationEnvironment>
     {
     }
 }

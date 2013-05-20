@@ -10,7 +10,7 @@ namespace Simulate.Samples.Clocks
 
         public static void Run()
         {
-            SimulationBuilder.Create(() => new CustomSimulationEnvironment())
+            SimulationBuilder.Create()
                 .Activate(() => new Clock())
                 .Simulate(TimeSpan.FromSeconds(30));
         }

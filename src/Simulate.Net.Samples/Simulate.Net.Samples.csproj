@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clocks\Clock.cs" />
-    <Compile Include="Clocks\CustomSimulationEnvironment.cs" />
     <Compile Include="Clocks\Simulation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
