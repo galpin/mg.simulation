@@ -21,9 +21,10 @@ using Simulate.Events;
 namespace Simulate
 {
     /// <summary>
-    /// Represents a simulation event. This class is <see langword="abstract"/>.
+    /// Represents a simulation event that executes within a simulation environment.
+    /// This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Event<TEnvironment> where TEnvironment : SimulationEnvironment
+    public abstract class Event<TSimulationEnvironment> where TSimulationEnvironment : SimulationEnvironment
     {
         #region Public Methods
 
@@ -36,7 +37,7 @@ namespace Simulate
         /// <returns>
         /// An enumerable sequence of <see cref="Event"/>'s that are the result of this events execution.
         /// </returns>
-        public virtual IEnumerable<Event> Execute(TEnvironment environment)
+        public virtual IEnumerable<Event> Execute(TSimulationEnvironment environment)
         {
             yield break;
         }

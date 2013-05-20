@@ -18,7 +18,7 @@ namespace Simulate
         /// Returns a task that runs a number of simulations until the specified time.
         /// </summary>
         /// <param name="builder">
-        /// The <see cref="SimulationBuilder"/>.
+        /// The <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
         /// </param>
         /// <param name="until">
         /// The time until which to run each simulation.
@@ -33,7 +33,11 @@ namespace Simulate
         /// Thrown when <paramref name="until"/> is less than <see cref="TimeSpan.Zero"/> or 
         /// <paramref name="simulations"/> is less than zero.
         /// </exception>
-        public static Task SimulateAsync<TEnvironment>(this SimulationBuilder<TEnvironment> builder, TimeSpan until, int simulations) where TEnvironment : SimulationEnvironment
+        public static Task SimulateAsync<TSimulationEnvironment>(
+            this SimulationBuilder<TSimulationEnvironment> builder,
+            TimeSpan until,
+            int simulations)
+            where TSimulationEnvironment : SimulationEnvironment
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
             Guard.IsInRange(simulations >= 0, "simulations");
@@ -45,7 +49,7 @@ namespace Simulate
         /// Returns a task that runs a simulation until the specified time.
         /// </summary>
         /// <param name="builder">
-        /// The <see cref="SimulationBuilder"/>.
+        /// The <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
         /// </param>
         /// <param name="until">
         /// The time until which to run the simulation.
@@ -59,7 +63,10 @@ namespace Simulate
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown when <paramref name="until"/> is less than <see cref="TimeSpan.Zero"/>.
         /// </exception>
-        public static Task SimulateAsync<TEnvironment>(this SimulationBuilder<TEnvironment> builder, TimeSpan until) where TEnvironment : SimulationEnvironment
+        public static Task SimulateAsync<TSimulationEnvironment>(
+            this SimulationBuilder<TSimulationEnvironment> builder,
+            TimeSpan until)
+            where TSimulationEnvironment : SimulationEnvironment
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
 

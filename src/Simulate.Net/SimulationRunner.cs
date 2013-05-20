@@ -26,14 +26,15 @@ using Simulate.Events;
 namespace Simulate
 {
     /// <summary>
-    /// A default <see cref="ISimulationRunner"/> implementation. This class cannot be inherited.
+    /// A default <see cref="ISimulationRunner{TSimulationEnvironment}"/> implementation. This class cannot be inherited.
     /// </summary>
-    public sealed class SimulationRunner<TEnvironment> : ISimulationRunner<TEnvironment> where TEnvironment : SimulationEnvironment
+    public sealed class SimulationRunner<TSimulationEnvironment> : ISimulationRunner<TSimulationEnvironment>
+        where TSimulationEnvironment : SimulationEnvironment
     {
         #region Declarations
 
         private readonly EventVisitor _visitor;
-        private readonly TEnvironment _environment;
+        private readonly TSimulationEnvironment _environment;
         private readonly PriorityQueue<ScheduledEventEnumerator> _events;
 
         #endregion
@@ -41,7 +42,7 @@ namespace Simulate
         #region Constructors
 
         /// <summary>
-        /// Creates a new instance of <see cref="SimulationRunner"/>.
+        /// Creates a new instance of <see cref="SimulationRunner{TSimulationEnvironment}"/>.
         /// </summary>
         /// <param name="environment">
         /// The simulation environment.
@@ -49,7 +50,7 @@ namespace Simulate
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="environment"/> is <see langword="null"/>.
         /// </exception>
-        public SimulationRunner(TEnvironment environment)
+        public SimulationRunner(TSimulationEnvironment environment)
         {
             Guard.IsNotNull(environment, "environment");
 
@@ -65,7 +66,7 @@ namespace Simulate
         /// <summary>
         /// Gets the simulation environment.
         /// </summary>
-        public SimulationEnvironment Environment
+        public TSimulationEnvironment Environment
         {
             get { return _environment; }
         }
@@ -75,7 +76,7 @@ namespace Simulate
         #region Public Methods
 
         /// <inheritdoc/>
-        public void Activate(TimeSpan at, Process<TEnvironment> process)
+        public void Activate(TimeSpan at, Process<TSimulationEnvironment> process)
         {
             Guard.IsInRange(at >= TimeSpan.Zero, "at");
             Guard.IsNotNull(process, "process");
@@ -108,7 +109,7 @@ namespace Simulate
             }
         }
 
-        private void Enqueue(TimeSpan at, Event<TEnvironment> @event)
+        private void Enqueue(TimeSpan at, Event<TSimulationEnvironment> @event)
         {
             _events.Enqueue(new ScheduledEventEnumerator(
                 at,
@@ -180,10 +181,10 @@ namespace Simulate
 
         private sealed class EventVisitor : IEventVisitor
         {
-            private readonly SimulationRunner<TEnvironment> _runner;
+            private readonly SimulationRunner<TSimulationEnvironment> _runner;
             private ScheduledEventEnumerator _enumerator;
 
-            public EventVisitor(SimulationRunner<TEnvironment> runner)
+            public EventVisitor(SimulationRunner<TSimulationEnvironment> runner)
             {
                 _runner = runner;
             }
@@ -207,7 +208,7 @@ namespace Simulate
 
         #region ResumeEvent
 
-        private sealed class ResumeEvent : Event<TEnvironment>
+        private sealed class ResumeEvent : Event<TSimulationEnvironment>
         {
             private readonly IEnumerator<Event> _parent;
 
@@ -216,7 +217,7 @@ namespace Simulate
                 _parent = parent;
             }
 
-            public override IEnumerable<Event> Execute(TEnvironment environment)
+            public override IEnumerable<Event> Execute(TSimulationEnvironment environment)
             {
                 while (_parent.MoveNext())
                 {

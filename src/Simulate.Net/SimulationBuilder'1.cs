@@ -25,23 +25,23 @@ namespace Simulate
     /// <summary>
     /// A mechanism for programmatically building simulations. This class cannot be inherited.
     /// </summary>
-    public sealed class SimulationBuilder<TEnvironment> where TEnvironment : SimulationEnvironment
+    public sealed class SimulationBuilder<TSimulationEnvironment> where TSimulationEnvironment : SimulationEnvironment
     {
         #region Declarations
  
         private readonly List<ProcessFactory> _processFactories;
-        private readonly Func<TEnvironment> _environmentFactory;
-        private readonly Func<TEnvironment, ISimulationRunner<TEnvironment>> _simulationRunnerFactory;
+        private readonly Func<TSimulationEnvironment> _environmentFactory;
+        private readonly Func<TSimulationEnvironment, ISimulationRunner<TSimulationEnvironment>> _simulationRunnerFactory;
 
         #endregion
 
         #region Constructors
 
-        internal SimulationBuilder(Func<TEnvironment> environmentFactory)
+        private SimulationBuilder(Func<TSimulationEnvironment> environmentFactory)
         {
             _environmentFactory = environmentFactory;
             _processFactories = new List<ProcessFactory>();
-            _simulationRunnerFactory = environment => new SimulationRunner<TEnvironment>(environment);
+            _simulationRunnerFactory = environment => new SimulationRunner<TSimulationEnvironment>(environment);
         }
 
         #endregion
@@ -49,17 +49,36 @@ namespace Simulate
         #region Public Methods
 
         /// <summary>
-        /// Activates a simulated process.
+        /// Creates a new <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
         /// </summary>
         /// <param name="factory">
-        /// A factory function that creates the <see cref="Process"/> to activate.
+        /// A factory function that creates a new <see cref="TSimulationEnvironment"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when <paramref name="factory"/> is <see langword="null"/>.
+        /// </exception>
+        public static SimulationBuilder<TSimulationEnvironment> Create(Func<TSimulationEnvironment> factory)
+        {
+            Guard.IsNotNull(factory, "environmentFactory");
+
+            return new SimulationBuilder<TSimulationEnvironment>(factory);
+        }
+
+        /// <summary>
+        /// Activates a simulation process.
+        /// </summary>
+        /// <param name="factory">
+        /// A factory function that creates the <see cref="Process{TSimulationEnvironment}"/> to activate.
         /// </param>
         /// <param name="at">
         /// The optional time at which to activate the process. If not specified, the process will be
         /// activated immediately.
         /// </param>
         /// <returns>
-        /// This <see cref="SimulationBuilder"/>.
+        /// This <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="factory"/> is <see langword="null"/>.
@@ -67,7 +86,9 @@ namespace Simulate
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown when <paramref name="at"/> is less than <see cref="TimeSpan.Zero"/>.
         /// </exception>
-        public SimulationBuilder<TEnvironment> Activate(Func<Process<TEnvironment>> factory, TimeSpan? at = null)
+        public SimulationBuilder<TSimulationEnvironment> Activate(
+            Func<Process<TSimulationEnvironment>> factory,
+            TimeSpan? at = null)
         {
             Guard.IsNotNull(factory, "factory");
             Guard.IsInRange(at == null || at >= TimeSpan.Zero, "at");
@@ -83,9 +104,9 @@ namespace Simulate
         /// Builds the simulation.
         /// </summary>
         /// <returns>
-        /// A <see cref="ISimulationRunner{TEnvironment}"/> that is ready to run the simulation.
+        /// A <see cref="ISimulationRunner{TSimulationEnvironment}"/> that is ready to run the simulation.
         /// </returns>
-        public ISimulationRunner<TEnvironment> Build()
+        public ISimulationRunner<TSimulationEnvironment> Build()
         {
             var runner = _simulationRunnerFactory(_environmentFactory());
             foreach (var factory in _processFactories)
@@ -139,7 +160,7 @@ namespace Simulate
         private sealed class ProcessFactory
         {
             public TimeSpan ActiveAt { get; set; }
-            public Func<Process<TEnvironment>> Factory { get; set; } 
+            public Func<Process<TSimulationEnvironment>> Factory { get; set; }
         }
 
         #endregion
