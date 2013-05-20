@@ -25,7 +25,8 @@ namespace Simulate
     /// <summary>
     /// A mechanism for programmatically building simulations. This class cannot be inherited.
     /// </summary>
-    public sealed class SimulationBuilder<TSimulationEnvironment> where TSimulationEnvironment : SimulationEnvironment
+    public sealed class SimulationBuilder<TSimulationEnvironment>
+        where TSimulationEnvironment : SimulationEnvironment
     {
         #region Declarations
  

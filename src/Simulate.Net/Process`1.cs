@@ -21,7 +21,8 @@ namespace Simulate
     /// Represents a simulated process that executes within a simulation environment.
     /// This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Process<TSimulationEnvironment> : Event<TSimulationEnvironment> where TSimulationEnvironment : SimulationEnvironment
+    public abstract class Process<TSimulationEnvironment> : Event<TSimulationEnvironment>
+        where TSimulationEnvironment : SimulationEnvironment
     {
     }
 }
