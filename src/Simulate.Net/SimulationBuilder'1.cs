@@ -123,14 +123,17 @@ namespace Simulate
         /// <param name="until">
         /// The time until which to run the simulation.
         /// </param>
+        /// <returns>
+        /// The simulation results.
+        /// </returns>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown when <paramref name="until"/> is less than <see cref="TimeSpan.Zero"/>.
         /// </exception>
-        public void Simulate(TimeSpan until)
+        public SimulationResult<TSimulationEnvironment> Simulate(TimeSpan until)
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
 
-            Build().Run(until);
+            return Build().Run(until);
         }
 
         /// <summary>
@@ -142,16 +145,21 @@ namespace Simulate
         /// <param name="simulations">
         /// The number of simulations to run.
         /// </param>
+        /// <returns>
+        /// An enumerable sequence of simulation results.
+        /// </returns>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown when <paramref name="until"/> is less than <see cref="TimeSpan.Zero"/> or 
         /// <paramref name="simulations"/> is less than zero.
         /// </exception>
-        public void Simulate(TimeSpan until, int simulations)
+        public IEnumerable<SimulationResult<TSimulationEnvironment>> Simulate(TimeSpan until, int simulations)
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
             Guard.IsInRange(simulations >= 0, "simulations");
 
-            Parallel.For(0, simulations, _ => Build().Run(until));
+            var results = new List<SimulationResult<TSimulationEnvironment>>();
+            Parallel.For(0, simulations, _ => results.Add(Build().Run(until)));
+            return results;
         }
 
         #endregion

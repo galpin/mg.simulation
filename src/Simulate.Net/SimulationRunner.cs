@@ -85,7 +85,7 @@ namespace Simulate
         }
 
         /// <inheritdoc/>
-        public void Run(TimeSpan until)
+        public SimulationResult<TSimulationEnvironment> Run(TimeSpan until)
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "until");
 
@@ -93,6 +93,7 @@ namespace Simulate
             {
                 Step();
             }
+            return new SimulationResult<TSimulationEnvironment>(_environment);
         }
 
         #endregion

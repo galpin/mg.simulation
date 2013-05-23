@@ -49,7 +49,7 @@ namespace Simulate
         /// <param name="until">
         /// The time until which to run the simulation.
         /// </param>
-        void Run(TimeSpan until);
+        SimulationResult<TSimulationEnvironment> Run(TimeSpan until);
 
         #endregion
     }
