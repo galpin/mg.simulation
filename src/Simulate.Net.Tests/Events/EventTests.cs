@@ -1,35 +1,50 @@
-﻿//// Copyright (c) Sahara Force India Formula One Team 2013.
+﻿// Copyright (c) Sahara Force India Formula One Team 2013.
 
-//using System;
-//using Xunit;
+using System;
+using Moq;
+using Xunit;
 
-//namespace Simulate.Events
-//{
-//    public class EventTests
-//    {
-//        #region Public Methods
+namespace Simulate.Events
+{
+    public class EventTests
+    {
+        #region Public Methods
 
-//        [Fact]
-//        public void Ctor_CorrectlyInitialisesMembers_Test()
-//        {
-//            var expectedGeneratedOn = DateTime.UtcNow;
+        [Fact]
+        public void GivenCtor_WhenDelay_ThenCorrectlyInitialisesMembers_Test()
+        {
+            var expectedDelay = TimeSpan.Zero;
 
-//            var actual = new StubEvent(expectedGeneratedOn);
+            var actual = new TimeoutEvent(expectedDelay);
 
-//            Assert.Equal(expectedGeneratedOn, actual.GeneratedOn);
-//        }
+            Assert.Equal(expectedDelay, actual.Delay);
+        }
 
-//        #endregion
+        [Fact]
+        public void GivenCtor_WhenDelayIsNegative_ThenThrows_Test()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new TimeoutEvent(TimeSpan.FromSeconds(-1)));
+        }
 
-//        #region StubEvent
+        [Fact]
+        public void GivenAccept_WhenVisitor_ThenCallsVisitOnVisitor_Test()
+        {
+            var visitor = new Mock<IEventVisitor>();
+            var @event = new TimeoutEvent(TimeSpan.Zero);
 
-//        private sealed class StubEvent : Event
-//        {
-//            public StubEvent(DateTime generatedOn) : base(generatedOn)
-//            {
-//            }
-//        }
+            @event.Accept(visitor.Object);
 
-//        #endregion
-//    }
-//}
+            visitor.Verify(x => x.Visit(@event), Times.Once);
+        }
+
+        [Fact]
+        public void GivenAccept_WhenVisitorIsNull_ThenThrows_Test()
+        {
+            var @event = new TimeoutEvent(TimeSpan.Zero);
+
+            Assert.Throws<ArgumentNullException>(() => @event.Accept(null));
+        }
+
+        #endregion
+    }
+}

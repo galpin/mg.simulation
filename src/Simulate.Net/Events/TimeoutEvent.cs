@@ -68,6 +68,8 @@ namespace Simulate.Events
         /// <inheritdoc/>
         public override sealed void Accept(IEventVisitor visitor)
         {
+            Guard.IsNotNull(visitor, "visitor");
+
             visitor.Visit(this);
         } 
 
