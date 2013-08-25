@@ -59,6 +59,7 @@ namespace Simulate
             int simulations)
             where TSimulationEnvironment : SimulationEnvironment
         {
+            Guard.IsNotNull(builder, "builder");
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
             Guard.IsInRange(simulations >= 0, "simulations");
 
@@ -88,6 +89,7 @@ namespace Simulate
             TimeSpan until)
             where TSimulationEnvironment : SimulationEnvironment
         {
+            Guard.IsNotNull(builder, "builder");
             Guard.IsInRange(until >= TimeSpan.Zero, "at");
 
             return Task.Run(() => builder.Simulate(until));
