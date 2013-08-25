@@ -81,7 +81,9 @@ namespace Simulate
             Guard.IsInRange(at >= TimeSpan.Zero, "at");
             Guard.IsNotNull(process, "process");
 
-            Enqueue(at, process);
+            Enqueue(new ScheduledEventEnumerator(
+                at,
+                process.Execute(_environment).GetEnumerator()));
         }
 
         /// <inheritdoc/>
@@ -110,11 +112,9 @@ namespace Simulate
             }
         }
 
-        private void Enqueue(TimeSpan at, Event<TSimulationEnvironment> @event)
+        private void Enqueue(ScheduledEventEnumerator enumerator)
         {
-            _events.Enqueue(new ScheduledEventEnumerator(
-                at,
-                @event.Execute(_environment).GetEnumerator()));
+            _events.Enqueue(enumerator);
         }
 
         #endregion
@@ -124,11 +124,10 @@ namespace Simulate
         private sealed class ScheduledEventEnumerator : IEnumerator<Event>, IComparable<ScheduledEventEnumerator>
         {
             private readonly IEnumerator<Event> _executeEnumerator;
-            private readonly TimeSpan _at;
 
             public ScheduledEventEnumerator(TimeSpan at, IEnumerator<Event> executeEnumerator)
             {
-                _at = at;
+                At = at;
                 _executeEnumerator = executeEnumerator;
             }
 
@@ -142,10 +141,7 @@ namespace Simulate
                 get { return Current; }
             }
 
-            public TimeSpan At
-            {
-                get { return _at; }
-            }
+            public TimeSpan At { get; set; }
 
             public void Dispose()
             {
@@ -164,15 +160,7 @@ namespace Simulate
 
             public int CompareTo(ScheduledEventEnumerator other)
             {
-                if (At < other.At)
-                {
-                    return 1;
-                }
-                if (At > other.At)
-                {
-                    return -1;
-                }
-                return 0;
+                return At.CompareTo(other.At);
             }
         }
 
@@ -199,33 +187,10 @@ namespace Simulate
 
             public void Visit(TimeoutEvent @event)
             {
-                _runner.Enqueue(
-                    _runner.Environment.Now + @event.Delay,
-                    new ResumeEvent(_enumerator));
+                _enumerator.At = _runner.Environment.Now + @event.Delay;
+                _runner.Enqueue(_enumerator);
             }
         }
-
-        #endregion
-
-        #region ResumeEvent
-
-        private sealed class ResumeEvent : Event<TSimulationEnvironment>
-        {
-            private readonly IEnumerator<Event> _parent;
-
-            public ResumeEvent(IEnumerator<Event> parent)
-            {
-                _parent = parent;
-            }
-
-            public override IEnumerable<Event> Execute(TSimulationEnvironment environment)
-            {
-                while (_parent.MoveNext())
-                {
-                    yield return _parent.Current;
-                }
-            }
-        } 
 
         #endregion
     }
