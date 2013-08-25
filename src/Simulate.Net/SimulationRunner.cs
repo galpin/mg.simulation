@@ -91,9 +91,9 @@ namespace Simulate
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "until");
 
-            while (_events.Any() && Environment.Now < until)
+            while (_events.Any() && _environment.Now < until)
             {
-                Step();
+                Step(until);
             }
             return new SimulationResult<TSimulationEnvironment>(_environment);
         }
@@ -102,9 +102,14 @@ namespace Simulate
 
         #region Private Methods
 
-        private void Step()
+        private void Step(TimeSpan until)
         {
             var @event = _events.Dequeue();
+            if (@event.At > until)
+            {
+                _environment.Now = until;
+                return;
+            }
             _environment.Now = @event.At;
             if (@event.MoveNext())
             {
