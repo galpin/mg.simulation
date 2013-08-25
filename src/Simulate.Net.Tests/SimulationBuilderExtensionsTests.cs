@@ -12,7 +12,7 @@ namespace Simulate
         #region Public Methods
 
         [Fact]
-        public void WhenSimulateAsync_GivenNullBuilder_ThenThrows_Test()
+        public void GivenSimulateAsync_WhenNullBuilder_ThenThrows_Test()
         {
             var builder = (SimulationBuilder<SimulationEnvironment>)null;
 
@@ -20,7 +20,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulateAsync_GivenNegativeDuration_ThenThrows_Test()
+        public void GivenSimulateAsync_WhenNegativeDuration_ThenThrows_Test()
         {
             var builder = SimulationBuilder.Create();
 
@@ -28,7 +28,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulateAsync_GivenSimulationBuilderAndDuration_ThenReturnsTaskThatRunsSimulation_Test()
+        public void GivenSimulateAsync_WhenSimulationBuilderAndDuration_ThenReturnsTaskThatRunsSimulation_Test()
         {
             var duration = TimeSpan.FromSeconds(1);
             var process = new Mock<Process>();
@@ -43,7 +43,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulateAsyncWithNumberOfSimulations_GivenNullBuilder_ThenThrows_Test()
+        public void GivenSimulateAsyncWithNumberOfSimulations_WhenNullBuilder_ThenThrows_Test()
         {
             var builder = (SimulationBuilder<SimulationEnvironment>)null;
 
@@ -51,7 +51,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulateAsyncWithNumberOfSimulations_GivenNegativeDuration_ThenThrows_Test()
+        public void GivenSimulateAsyncWithNumberOfSimulations_WhenNegativeDuration_ThenThrows_Test()
         {
             var builder = SimulationBuilder.Create();
 
@@ -59,7 +59,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulateAsyncWithNumberOfSimulations_GivenNegativeNumberOfSimulations_ThenThrows_Test()
+        public void GivenSimulateAsyncWithNumberOfSimulations_WhenNegativeNumberOfSimulations_ThenThrows_Test()
         {
             var builder = SimulationBuilder.Create();
 
@@ -67,7 +67,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulateAsyncWithNumberOfSimulations_GivenSimulationBuilderAndDuration_ThenReturnsTasksThatRunsSimulations_Test()
+        public void GivenSimulateAsyncWithNumberOfSimulations_WhenSimulationBuilderAndDuration_ThenReturnsTasksThatRunsSimulations_Test()
         {
             var duration = TimeSpan.FromSeconds(1);
             var process = new Mock<Process>();

@@ -10,13 +10,13 @@ namespace Simulate
         #region Public Methods
 
         [Fact]
-        public void WhenCreate_GivenNullFactory_ThenThrows_Test()
+        public void GivenCreate_WhenNullFactory_ThenThrows_Test()
         {
             Assert.Throws<ArgumentNullException>(() => SimulationBuilder.Create((Func<SimulationEnvironment>)null));
         }
 
         [Fact]
-        public void WhenCreate_GivenFactoryFunc_ReturnsSimulationBuilderForSimulationEnvironment_Test()
+        public void GivenCreate_WhenFactoryFunc_ReturnsSimulationBuilderForSimulationEnvironment_Test()
         {
             var builder = SimulationBuilder.Create(() => new SimulationEnvironment());
 

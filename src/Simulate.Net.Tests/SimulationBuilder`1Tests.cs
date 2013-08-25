@@ -12,13 +12,13 @@ namespace Simulate
         #region Public Methods
 
         [Fact]
-        public void WhenCreate_GivenNullFactory_ThenThrows_Test()
+        public void GivenCreate_WhenNullFactory_ThenThrows_Test()
         {
             Assert.Throws<ArgumentNullException>(() => SimulationBuilder<SimulationEnvironment>.Create(null));
         }
 
         [Fact]
-        public void WhenCreate_GivenFactoryFunc_ReturnsSimulationBuilderForSimulationEnvironment_Test()
+        public void GivenCreate_WhenFactoryFunc_ReturnsSimulationBuilderForSimulationEnvironment_Test()
         {
             var builder = SimulationBuilder<SimulationEnvironment>.Create(() => new SimulationEnvironment());
 
@@ -26,7 +26,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenActivate_GivenNullFactory_ThenThrows_Test()
+        public void GivenActivate_WhenNullFactory_ThenThrows_Test()
         {
             var builder = CreateBuilder();
 
@@ -34,7 +34,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenActivate_GivenNegativeActivationTime_ThenThrows_Test()
+        public void GivenActivate_WhenNegativeActivationTime_ThenThrows_Test()
         {
             var builder = CreateBuilder();
 
@@ -43,7 +43,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenActivate_GivenProcessAndNoActivationTime_ActivatesProcessImmediately_Test()
+        public void GivenActivate_WhenProcessAndNoActivationTime_ActivatesProcessImmediately_Test()
         {
             var process = new StatisticProcess();
 
@@ -55,7 +55,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenActivate_GivenProcessAndActivationTime_ActivatesProcessAtActivationTime_Test()
+        public void GivenActivate_WhenProcessAndActivationTime_ActivatesProcessAtActivationTime_Test()
         {
             var process = new StatisticProcess();
             var expectedActivationTime = TimeSpan.FromSeconds(1);
@@ -68,13 +68,13 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulate_GivenNegativeSimulationDuration_Throws_Test()
+        public void GivenSimulate_WhenNegativeSimulationDuration_Throws_Test()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => CreateBuilder().Simulate(TimeSpan.FromSeconds(-1)));
         }
 
         [Fact]
-        public void WhenSimulate_GivenSimulationDuration_ReturnsSimulationUntilDuration_Test()
+        public void GivenSimulate_WhenSimulationDuration_ReturnsSimulationUntilDuration_Test()
         {
             var expectedDuration = TimeSpan.FromSeconds(5);
             var delay = expectedDuration + TimeSpan.FromSeconds(1);
@@ -87,7 +87,7 @@ namespace Simulate
         }
 
         [Fact]
-        public void WhenSimulate_GivenSimulationDurationAndNumberOfSimulations_ReturnsNumberOfSimulationsRunUntilDuration_Test()
+        public void GivenSimulate_WhenSimulationDurationAndNumberOfSimulations_ReturnsNumberOfSimulationsRunUntilDuration_Test()
         {
             var expectedSimulations = 10;
             var expectedDuration = TimeSpan.FromSeconds(5);
