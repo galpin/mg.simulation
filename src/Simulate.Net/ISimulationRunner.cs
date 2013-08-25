@@ -24,7 +24,16 @@ namespace Simulate
     /// </summary>
     public interface ISimulationRunner<TSimulationEnvironment> where TSimulationEnvironment : SimulationEnvironment
     {
-        #region Public Methods
+        #region Properties
+
+        /// <summary>
+        /// Gets an observable sequence of events executed by running the simulation.
+        /// </summary>
+        IObservable<Event> Events { get; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Activate a <see cref="Process{TSimulationEnvironment}"/> at a specified time.

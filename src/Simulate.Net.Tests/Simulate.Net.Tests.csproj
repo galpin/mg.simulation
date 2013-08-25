@@ -65,6 +65,7 @@
     <Compile Include="SimulationBuilderTests.cs" />
     <Compile Include="SimulationBuilder`1Tests.cs" />
     <Compile Include="SimulationResultTests.cs" />
+    <Compile Include="SimulationRunnerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Simulate.NET\Simulate.NET.csproj">

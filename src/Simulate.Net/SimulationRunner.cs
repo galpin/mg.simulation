@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Subjects;
 using Basics;
 using Simulate.Collections;
 using Simulate.Events;
@@ -35,7 +36,8 @@ namespace Simulate
 
         private readonly EventVisitor _visitor;
         private readonly TSimulationEnvironment _environment;
-        private readonly PriorityQueue<ScheduledEventEnumerator> _events;
+        private readonly PriorityQueue<ScheduledEventEnumerator> _eventQueue;
+        private readonly Subject<Event> _events = new Subject<Event>();
 
         #endregion
 
@@ -56,12 +58,18 @@ namespace Simulate
 
             _environment = environment;
             _visitor = new EventVisitor(this);
-            _events = new PriorityQueue<ScheduledEventEnumerator>();
+            _eventQueue = new PriorityQueue<ScheduledEventEnumerator>();
         }
 
         #endregion
 
-        #region Properties
+        #region Public Properties
+
+        /// <inheritdoc/>
+        public IObservable<Event> Events
+        {
+            get { return _events; }
+        }
 
         /// <summary>
         /// Gets the simulation environment.
@@ -91,10 +99,11 @@ namespace Simulate
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "until");
 
-            while (_events.Any() && _environment.Now < until)
+            while (_eventQueue.Any() && _environment.Now < until)
             {
                 Step(until);
             }
+            _events.OnCompleted();
             return new SimulationResult<TSimulationEnvironment>(_environment);
         }
 
@@ -104,22 +113,23 @@ namespace Simulate
 
         private void Step(TimeSpan until)
         {
-            var @event = _events.Dequeue();
-            if (@event.At > until)
+            var eventEnumerator = _eventQueue.Dequeue();
+            if (eventEnumerator.At > until)
             {
                 _environment.Now = until;
                 return;
             }
-            _environment.Now = @event.At;
-            if (@event.MoveNext())
+            _environment.Now = eventEnumerator.At;
+            if (eventEnumerator.MoveNext())
             {
-                _visitor.Handle(@event);
+                _events.OnNext(eventEnumerator.Current);
+                _visitor.Handle(eventEnumerator);
             }
         }
 
         private void Enqueue(ScheduledEventEnumerator enumerator)
         {
-            _events.Enqueue(enumerator);
+            _eventQueue.Enqueue(enumerator);
         }
 
         #endregion
