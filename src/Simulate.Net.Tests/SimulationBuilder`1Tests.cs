@@ -83,6 +83,26 @@ namespace Simulate
         }
 
         [Fact]
+        public void GivenActivateRange_WhenProcessesAndActivationTime_ActivatesProcessesAtActivationTime_Test()
+        {
+            var process1 = new StatisticProcess();
+            var process2 = new StatisticProcess();
+            var expectedActivationTime = TimeSpan.FromSeconds(1);
+            var factories = new Func<Process<SimulationEnvironment>>[]
+            {
+                () => process1,
+                () => process2
+            };
+
+            CreateBuilder()
+                .ActivateRange(factories, expectedActivationTime)
+                .Simulate(TimeSpan.FromSeconds(5));
+
+            Assert.Equal(expectedActivationTime, process1.ActivationTime);
+            Assert.Equal(expectedActivationTime, process2.ActivationTime);
+        }
+
+        [Fact]
         public void GivenSimulate_WhenNegativeSimulationDuration_Throws_Test()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => CreateBuilder().Simulate(TimeSpan.FromSeconds(-1)));

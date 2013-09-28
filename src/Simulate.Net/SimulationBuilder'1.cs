@@ -102,6 +102,39 @@ namespace Simulate
         }
 
         /// <summary>
+        /// Activates a range of simulation processes.
+        /// </summary>
+        /// <param name="factories">
+        /// A sequence of factory functions that creates a <see cref="Process{TSimulationEnvironment}"/> to activate.
+        /// </param>
+        /// <param name="at">
+        /// The optional time at which to activate the processes. If not specified, the processes will be
+        /// activated immediately.
+        /// </param>
+        /// <returns>
+        /// This <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when <paramref name="factories"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// Thrown when <paramref name="at"/> is less than <see cref="TimeSpan.Zero"/>.
+        /// </exception>
+        public SimulationBuilder<TSimulationEnvironment> ActivateRange(
+            IEnumerable<Func<Process<TSimulationEnvironment>>> factories,
+            TimeSpan? at = null)
+        {
+            Guard.IsNotNull(factories, "factories");
+            Guard.IsInRange(at == null || at >= TimeSpan.Zero, "at");
+
+            foreach (var factory in factories)
+            {
+                Activate(factory, at);
+            }
+            return this;
+        }
+
+        /// <summary>
         /// Builds the simulation.
         /// </summary>
         /// <returns>

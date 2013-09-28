@@ -61,11 +61,16 @@
     <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Events\EventTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenarios\Support\ActivateProcess.cs" />
+    <Compile Include="Scenarios\ScenarioBase.cs" />
+    <Compile Include="Scenarios\StandardScenario.cs" />
+    <Compile Include="Scenarios\Support\ActivateProcess`1.cs" />
     <Compile Include="SimulationBuilderExtensionsTests.cs" />
     <Compile Include="SimulationBuilderTests.cs" />
     <Compile Include="SimulationBuilder`1Tests.cs" />
     <Compile Include="SimulationResultTests.cs" />
     <Compile Include="SimulationRunnerTests.cs" />
+    <Compile Include="Support\AssertionsExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Simulate.NET\Simulate.NET.csproj">
@@ -76,6 +81,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
