@@ -47,7 +47,7 @@ namespace Simulate
         /// </returns>
         public TimeoutEvent Timeout(TimeSpan delay)
         {
-            return new TimeoutEvent(delay);
+            return new TimeoutEvent(Now, delay);
         }
 
         #endregion

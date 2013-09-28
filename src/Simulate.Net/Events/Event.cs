@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
+
 namespace Simulate.Events
 {
     /// <summary>
@@ -22,6 +24,39 @@ namespace Simulate.Events
     /// </summary>
     public abstract class Event
     {
+        #region Declarations
+
+        private readonly TimeSpan _generatedOn;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Event"/> class.
+        /// </summary>
+        /// <param name="generatedOn">
+        /// The simulation time at which the event was generated.
+        /// </param>
+        protected Event(TimeSpan generatedOn)
+        {
+            _generatedOn = generatedOn;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the simulation time at which the event was generated.
+        /// </summary>
+        public TimeSpan GeneratedOn
+        {
+            get { return _generatedOn; }
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>

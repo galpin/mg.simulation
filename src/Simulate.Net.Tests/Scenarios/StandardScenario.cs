@@ -35,9 +35,9 @@ namespace Simulate.Scenarios
         /// <inheritdoc/>
         protected override IEnumerable<Event> GetExpectedEvents()
         {
-            yield return new TimeoutEvent(TimeSpan.FromSeconds(1));
-            yield return new TimeoutEvent(TimeSpan.FromSeconds(2));
-            yield return new TimeoutEvent(TimeSpan.FromSeconds(3));
+            yield return new TimeoutEvent(TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            yield return new TimeoutEvent(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
+            yield return new TimeoutEvent(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(3));
         }
 
         /// <inheritdoc/>
@@ -54,9 +54,9 @@ namespace Simulate.Scenarios
         {
             public override IEnumerable<Event> Execute(SimulationEnvironment environment)
             {
-                yield return new TimeoutEvent(TimeSpan.FromSeconds(1));
-                yield return new TimeoutEvent(TimeSpan.FromSeconds(2));
-                yield return new TimeoutEvent(TimeSpan.FromSeconds(3));
+                yield return environment.Timeout(TimeSpan.FromSeconds(1));
+                yield return environment.Timeout(TimeSpan.FromSeconds(2));
+                yield return environment.Timeout(TimeSpan.FromSeconds(3));
             }
         }
 

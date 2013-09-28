@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 
 namespace Simulate.Events
@@ -23,8 +24,23 @@ namespace Simulate.Events
     /// Represents a simulation event that executes within a simulation environment.
     /// This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Event<TSimulationEnvironment> where TSimulationEnvironment : SimulationEnvironment
+    public abstract class Event<TSimulationEnvironment> : Event where TSimulationEnvironment : SimulationEnvironment
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Event"/> class.
+        /// </summary>
+        /// <param name="generatedOn">
+        /// The simulation time at which the event was generated.
+        /// </param>
+        protected Event(TimeSpan generatedOn)
+            : base(generatedOn)
+        {
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -39,16 +55,6 @@ namespace Simulate.Events
         public virtual IEnumerable<Event> Execute(TSimulationEnvironment environment)
         {
             yield break;
-        }
-
-        /// <summary>
-        /// Accept an <see cref="IEventVisitor"/>.
-        /// </summary>
-        /// <param name="visitor">
-        /// The visitor to accept.
-        /// </param>
-        public virtual void Accept(IEventVisitor visitor)
-        {
         }
 
         #endregion

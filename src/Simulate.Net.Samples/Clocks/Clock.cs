@@ -15,7 +15,7 @@ namespace Simulate.Samples.Clocks
             while (true)
             {
                 Console.WriteLine(environment.Now);
-                yield return new TimeoutEvent(TimeSpan.FromSeconds(1));
+                yield return environment.Timeout(TimeSpan.FromSeconds(1));
             }
         } 
 

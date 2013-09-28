@@ -36,13 +36,17 @@ namespace Simulate.Events
         /// <summary>
         /// Creates a new instance of <see cref="TimeoutEvent"/>.
         /// </summary>
+        /// <param name="generatedOn">
+        /// The simulation time at which the event was generated.
+        /// </param>
         /// <param name="delay">
         /// The time for which to delay.
         /// </param>
         /// <exception cref="System.ArgumentOutOfRangeException">
         /// Thrown when <paramref name="delay"/> is less than <see cref="TimeSpan.Zero"/>.
         /// </exception>
-        public TimeoutEvent(TimeSpan delay)
+        public TimeoutEvent(TimeSpan generatedOn, TimeSpan delay)
+            : base(generatedOn)
         {
             Guard.IsInRange(delay >= TimeSpan.Zero, "delay");
 

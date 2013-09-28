@@ -26,26 +26,28 @@ namespace Simulate.Events
         #region Public Methods
 
         [Fact]
-        public void GivenCtor_WhenDelay_ThenCorrectlyInitialisesMembers_Test()
+        public void GivenCtor_ThenCorrectlyInitialisesMembers_Test()
         {
-            var expectedDelay = TimeSpan.Zero;
+            var expectedGeneratedOn = TimeSpan.FromSeconds(1);
+            var expectedDelay = TimeSpan.FromSeconds(2);
 
-            var actual = new TimeoutEvent(expectedDelay);
+            var actual = new TimeoutEvent(expectedGeneratedOn, expectedDelay);
 
+            Assert.Equal(expectedGeneratedOn, actual.GeneratedOn);
             Assert.Equal(expectedDelay, actual.Delay);
         }
 
         [Fact]
         public void GivenCtor_WhenDelayIsNegative_ThenThrows_Test()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new TimeoutEvent(TimeSpan.FromSeconds(-1)));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new TimeoutEvent(TimeSpan.Zero, TimeSpan.FromSeconds(-1)));
         }
 
         [Fact]
         public void GivenAccept_WhenVisitor_ThenCallsVisitOnVisitor_Test()
         {
             var visitor = new Mock<IEventVisitor>();
-            var @event = new TimeoutEvent(TimeSpan.Zero);
+            var @event = new TimeoutEvent(TimeSpan.Zero, TimeSpan.Zero);
 
             @event.Accept(visitor.Object);
 
@@ -55,7 +57,7 @@ namespace Simulate.Events
         [Fact]
         public void GivenAccept_WhenVisitorIsNull_ThenThrows_Test()
         {
-            var @event = new TimeoutEvent(TimeSpan.Zero);
+            var @event = new TimeoutEvent(TimeSpan.Zero, TimeSpan.Zero);
 
             Assert.Throws<ArgumentNullException>(() => @event.Accept(null));
         }
