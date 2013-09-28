@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Simulate.Events;
 using Xunit;
 
 namespace Simulate

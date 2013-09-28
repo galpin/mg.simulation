@@ -16,6 +16,7 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using Simulate.Events;
 
 namespace Simulate
 {

@@ -66,11 +66,11 @@
     <Compile Include="Collections\ArrayExtensions.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Process.cs" />
-    <Compile Include="Event`1.cs" />
+    <Compile Include="Events\Event`1.cs" />
     <Compile Include="Process`1.cs" />
     <Compile Include="SimulationBuilder.cs" />
     <Compile Include="SimulationBuilderExtensions.cs" />
-    <Compile Include="Event.cs" />
+    <Compile Include="Events\Event.cs" />
     <Compile Include="Events\TimeoutEvent.cs" />
     <Compile Include="Events\IEventVisitor.cs" />
     <Compile Include="ISimulationRunner.cs" />
