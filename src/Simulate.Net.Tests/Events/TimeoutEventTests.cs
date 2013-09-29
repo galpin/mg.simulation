@@ -1,17 +1,15 @@
-﻿// Simulate.NET
-//
-// Copyright (c) Martin Galpin 2013.
-//
+﻿// Copyright (c) Martin Galpin 2013.
+// 
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
 // version 2.1 of the License, or (at your option) any later version.
-//
+// 
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 // Lesser General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
@@ -21,7 +19,7 @@ using Xunit;
 
 namespace Simulate.Events
 {
-    public class EventTests
+    public class TimeoutEventTests
     {
         #region Public Methods
 
@@ -29,32 +27,37 @@ namespace Simulate.Events
         public void GivenCtor_ThenCorrectlyInitialisesMembers_Test()
         {
             var expectedGeneratedOn = TimeSpan.FromSeconds(1);
+            var expectedDelay = TimeSpan.FromSeconds(2);
 
-            var actual = new StubEvent(expectedGeneratedOn);
+            var actual = new TimeoutEvent(expectedGeneratedOn, expectedDelay);
 
             Assert.Equal(expectedGeneratedOn, actual.GeneratedOn);
+            Assert.Equal(expectedDelay, actual.Delay);
         }
 
         [Fact]
-        public void ImplementsEqualityContract_Test()
+        public void GivenCtor_WhenDelayIsNegative_ThenThrows_Test()
         {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new TimeoutEvent(TimeSpan.Zero, TimeSpan.FromSeconds(-1)));
         }
 
-        #endregion
-
-        #region StubEvent
-
-        private class StubEvent : Event<StubEvent>
+        [Fact]
+        public void GivenAccept_WhenVisitor_ThenCallsVisitOnVisitor_Test()
         {
-           public StubEvent(TimeSpan generatedOn)
-               : base(generatedOn)
-           {
-           }
+            var visitor = new Mock<IEventVisitor>();
+            var @event = new TimeoutEvent(TimeSpan.Zero, TimeSpan.Zero);
 
-            protected override bool EqualsCore(StubEvent other)
-            {
-                return true;
-            }
+            @event.Accept(visitor.Object);
+
+            visitor.Verify(x => x.Visit(@event), Times.Once);
+        }
+
+        [Fact]
+        public void GivenAccept_WhenVisitorIsNull_ThenThrows_Test()
+        {
+            var @event = new TimeoutEvent(TimeSpan.Zero, TimeSpan.Zero);
+
+            Assert.Throws<ArgumentNullException>(() => @event.Accept(null));
         }
 
         #endregion

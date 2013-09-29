@@ -28,6 +28,23 @@ namespace Simulate.Scenarios
 {
     public abstract class ScenarioBase : TestClass
     {
+        #region Declarations
+
+        private static readonly TimeSpan MaxDuration = TimeSpan.FromHours(1);
+
+        private readonly TimeSpan _maxDuration;
+
+        #endregion
+
+        #region Constructors
+
+        protected ScenarioBase(TimeSpan? maxDuration = null)
+        {
+            _maxDuration = maxDuration ?? MaxDuration;
+        }
+
+        #endregion
+
         #region Public Methods
 
         [Fact]
@@ -90,14 +107,12 @@ namespace Simulate.Scenarios
 
         #region Private Methods
 
-        private void AssertScenario(
-            ScenarioBase scenario,
-            SimulationRunner<SimulationEnvironment> runner)
+        private void AssertScenario(ScenarioBase scenario, ISimulationRunner<SimulationEnvironment> runner)
         {
             var expected = scenario.GetExpectedEvents().ToList();
             var actual = new List<Event>();
-            //runner.Events.Subscribe(x => actual.Add(x));
-            var result = runner.Run(TimeSpan.Zero);
+            runner.Events.Subscribe(actual.Add);
+            var result = runner.Run(_maxDuration);
             Assert.SequenceEqual(expected, actual.ToList());
             AssertEnvironmentState(result.Environment);
         }
