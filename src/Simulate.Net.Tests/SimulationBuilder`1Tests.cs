@@ -141,6 +141,61 @@ namespace Simulate
             }
         }
 
+        [Fact]
+        public void GivenSubscribe_WithSingleObserverFactory_ForwardsSimulationEventsToObserver_Test()
+        {
+            var expectedDuration = TimeSpan.FromSeconds(5);
+            var actual = new List<Event>();
+
+            CreateBuilder()
+                .Activate(() => new ClockProcess())
+                .Subscribe(events => events.Subscribe(actual.Add))
+                .Simulate(expectedDuration);
+
+            Assert.Equal(6, actual.Count);
+            foreach (var @event in actual)
+            {
+                Assert.IsType<TimeoutEvent>(@event);
+            }
+        }
+
+        [Fact]
+        public void GivenSubscribe_WhenNullObserverFactory_Throws_Test()
+        {
+            Assert.Throws<ArgumentNullException>(() => CreateBuilder().Subscribe(null));
+        }
+
+        [Fact]
+        public void GivenSubscribe_WithSingleObserverFactory_InvokesOnCompleteWhenSimulationFinishes_Test()
+        {
+            var expectedDuration = TimeSpan.FromSeconds(5);
+            var isComplete = false;
+
+            CreateBuilder()
+                .Activate(() => new ClockProcess())
+                .Subscribe(events => events.Subscribe(_ => { }, () => isComplete = true))
+                .Simulate(expectedDuration);
+
+            Assert.True(isComplete);
+        }
+
+        [Fact]
+        public void GivenSubscribe_WithMultipleObserverFactories_ForwardsSimulationEventsToAllObservers_Test()
+        {
+            var expectedDuration = TimeSpan.FromSeconds(5);
+            var actual1 = new List<Event>();
+            var actual2 = new List<Event>();
+
+            CreateBuilder()
+                .Activate(() => new ClockProcess())
+                .Subscribe(events => events.Subscribe(actual1.Add))
+                .Subscribe(events => events.Subscribe(actual2.Add))
+                .Simulate(expectedDuration);
+
+            Assert.Equal(actual1.Count, actual2.Count);
+            //Assert.SequenceEqual(actual1, actual2);
+        }
+
         #endregion
 
         #region Private Methods
@@ -152,7 +207,7 @@ namespace Simulate
 
         #endregion
 
-        #region ProcessStub
+        #region StatisticProcess
 
         private sealed class StatisticProcess : Process
         {
@@ -181,6 +236,21 @@ namespace Simulate
             public override IEnumerable<Event> Execute(SimulationEnvironment environment)
             {
                 yield return environment.Timeout(_delay);
+            }
+        }
+
+        #endregion
+
+        #region ClockProcess
+
+        private sealed class ClockProcess : Process
+        {
+            public override IEnumerable<Event> Execute(SimulationEnvironment environment)
+            {
+                while (true)
+                {
+                    yield return environment.Timeout(TimeSpan.FromSeconds(1));
+                }
             }
         }
 

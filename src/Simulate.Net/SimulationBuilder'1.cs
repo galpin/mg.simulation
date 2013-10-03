@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Basics;
+using Simulate.Events;
 
 namespace Simulate
 {
@@ -33,6 +34,7 @@ namespace Simulate
         private readonly List<ProcessFactory> _processFactories;
         private readonly Func<TSimulationEnvironment> _environmentFactory;
         private readonly Func<TSimulationEnvironment, ISimulationRunner<TSimulationEnvironment>> _simulationRunnerFactory;
+        private readonly List<Func<IObservable<Event>, IDisposable>> _observerFactories;
 
         #endregion
 
@@ -42,6 +44,7 @@ namespace Simulate
         {
             _environmentFactory = environmentFactory;
             _processFactories = new List<ProcessFactory>();
+            _observerFactories = new List<Func<IObservable<Event>, IDisposable>>();
             _simulationRunnerFactory = environment => new SimulationRunner<TSimulationEnvironment>(environment);
         }
 
@@ -135,6 +138,26 @@ namespace Simulate
         }
 
         /// <summary>
+        /// Subscribes an element handler to the observable sequence of simulation events.
+        /// </summary>
+        /// <param name="observerFactory">
+        /// A factory function that creates the element handler for a sequence of simulation events.
+        /// </param>
+        /// <returns>
+        /// This <see cref="SimulationBuilder{TSimulationEnvironment}"/>.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when <paramref name="observerFactory"/> is <see langword="null"/>.
+        /// </exception>
+        public SimulationBuilder<TSimulationEnvironment> Subscribe(Func<IObservable<Event>, IDisposable> observerFactory)
+        {
+            Guard.IsNotNull(observerFactory, "observerFactory");
+
+            _observerFactories.Add(observerFactory);
+            return this;
+        }
+
+        /// <summary>
         /// Builds the simulation.
         /// </summary>
         /// <returns>
@@ -146,6 +169,10 @@ namespace Simulate
             foreach (var factory in _processFactories)
             {
                 runner.Activate(factory.ActiveAt, factory.Factory());
+            }
+            foreach (var factory in _observerFactories)
+            {
+                factory(runner.Events);
             }
             return runner;
         }
