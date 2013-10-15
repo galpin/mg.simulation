@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
@@ -227,6 +228,35 @@ namespace Simulate.Collections
             AssertDequeue(priorityQueue, expectedDequeueOrder: new[] {10, 9, 8, 7, 6, 5, 4, 3, 2, 1});
         }
 
+        [Fact]
+        public void Dequeue_WhenItemsAreOfTheSamePriorityThenItemsAreDequeudedInOrderOfInsertion_Test()
+        {
+            var item1 = new Item(1, "1");
+            var item2 = new Item(2, "2");
+            var item2a = new Item(2, "2a");
+            var item2b = new Item(2, "2b");
+            var item2c = new Item(2, "2c");
+            var item3 = new Item(3, "3");
+            var item4 = new Item(4, "4");
+            var priorityQueue = new PriorityQueue<Item>();
+
+            priorityQueue.Enqueue(item1);
+            priorityQueue.Enqueue(item2);
+            priorityQueue.Enqueue(item2a);
+            priorityQueue.Enqueue(item2b);
+            priorityQueue.Enqueue(item2c);
+            priorityQueue.Enqueue(item3);
+            priorityQueue.Enqueue(item4);
+
+            Assert.Same(item1, priorityQueue.Dequeue());
+            Assert.Same(item2, priorityQueue.Dequeue());
+            Assert.Same(item2a, priorityQueue.Dequeue());
+            Assert.Same(item2b, priorityQueue.Dequeue());
+            Assert.Same(item2c, priorityQueue.Dequeue());
+            Assert.Same(item3, priorityQueue.Dequeue());
+            Assert.Same(item4, priorityQueue.Dequeue());
+        }
+
         #endregion
 
         #region Private Methods
@@ -259,6 +289,28 @@ namespace Simulate.Collections
             }
 
             #endregion
+        }
+
+        #endregion
+
+        #region Item
+
+        [DebuggerDisplay("{_tag}")]
+        private class Item : IComparable<Item>
+        {
+            private readonly int _priority;
+            private readonly string _tag;
+
+            public Item(int priority, string tag)
+            {
+                _priority = priority;
+                _tag = tag;
+            }
+
+            public int CompareTo(Item other)
+            {
+                return other._priority.CompareTo(_priority);
+            }
         }
 
         #endregion

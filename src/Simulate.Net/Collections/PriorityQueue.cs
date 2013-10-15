@@ -14,7 +14,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
-
+// ReSharper disable PossibleMultipleEnumeration
 
 using System;
 using System.Collections;
@@ -55,7 +55,7 @@ namespace Simulate.Collections
         /// <summary>
         /// The internal priority heap. Stores items at indices 1 to N.
         /// </summary>
-        private T[] _heap;
+        private Item[] _heap;
 
         /// <summary>
         /// The number of items in the heap.
@@ -120,7 +120,7 @@ namespace Simulate.Collections
 
         /// <summary>
         /// Creates a new instance of <see cref="PriorityQueue{T}"/> that contains elements copied from the specified
-        /// collection and has sufficient capacity to accomodate the number of elements copied.
+        /// collection and has sufficient capacity to accommodate the number of elements copied.
         /// </summary>
         /// <param name="source">
         /// The collection whose elements are copied to the new <see cref="PriorityQueue{T}"/>.
@@ -153,13 +153,13 @@ namespace Simulate.Collections
             Guard.IsInRange(initialCapacity >= 0, "initialCapacity");
             Guard.IsNotNull(comparer, "comparer");
 
-            _heap = new T[initialCapacity + 1];
+            _heap = new Item[initialCapacity + 1];
             _comparer = comparer;
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="PriorityQueue{T}"/> that contains elements copied from the specified
-        /// collection, has sufficient capacity to accomodate the number of elements copied and uses the given comparer.
+        /// collection, has sufficient capacity to accommodate the number of elements copied and uses the given comparer.
         /// </summary>
         /// <param name="source">
         /// The collection whose elements are copied to the new <see cref="PriorityQueue{T}"/>.
@@ -238,7 +238,7 @@ namespace Simulate.Collections
         {
             Guard.IsNotNull(array, "array");
             Guard.IsInRange(index >= 0, "index");
-            Guard.IsTrue(array.Length - index >= Count, () => index);
+            Guard.IsTrue(array.Length - index >= Count, "index");
             
             foreach (var item in this)
             {
@@ -258,7 +258,7 @@ namespace Simulate.Collections
         /// array before the new element is added.
         /// 
         /// If <see cref="Count"/> is less then the capacity then this method is an O(log n) operation. If the internal
-        /// array needs to be reallocated to accomodate the new element, this method becomes an O(n) operation.
+        /// array needs to be reallocated to accommodate the new element, this method becomes an O(n) operation.
         /// </remarks>    
         public void Enqueue(T item)
         {
@@ -266,9 +266,8 @@ namespace Simulate.Collections
             {
                 SetCapacity(_N + _growFactor);
             }
-            _heap[++_N] = item;
+            _heap[++_N] = new Item(_version++, item);
             Swim(_N);
-            _version++;
             VerifyHeap();
         }
 
@@ -290,11 +289,11 @@ namespace Simulate.Collections
 
             var item = _heap[1];
             _heap.Swap(1, _N--);
+            _heap[_N + 1] = null;
             Sink(1);
-            _heap[_N + 1] = default(T);
             _version++;
             VerifyHeap();
-            return item;
+            return item.Value;
         }
 
         /// <summary>
@@ -310,7 +309,7 @@ namespace Simulate.Collections
         {
             VerifyNotEmpty();
 
-            return _heap[1];
+            return _heap[1].Value;
         }
 
         /// <summary>
@@ -375,12 +374,20 @@ namespace Simulate.Collections
 
         private bool IsLess(int i, int j)
         {
-            return _comparer.Compare(_heap[i], _heap[j]) < 0;
+            var x = _heap[i];
+            var y = _heap[j];
+            var comparison = _comparer.Compare(x.Value, y.Value);
+            if (comparison == 0)
+            {
+                // Two items are of equal priority so order based on time of insertion.
+                return y.InsertedAt < x.InsertedAt;
+            }
+            return comparison < 0;
         }
 
         private void SetCapacity(int capacity)
         {
-            var newHeap = new T[capacity + 1];
+            var newHeap = new Item[capacity + 1];
             if (_N > 1)
             {
                 Array.Copy(_heap, 0, newHeap, 0, _N + 1);
@@ -540,6 +547,32 @@ namespace Simulate.Collections
             }
 
             #endregion
+        }
+
+        #endregion
+
+        #region Item
+
+        private sealed class Item
+        {
+            private readonly int _insertedAt;
+            private readonly T _value;
+
+            public Item(int insertedAt, T value)
+            {
+                _insertedAt = insertedAt;
+                _value = value;
+            }
+
+            public int InsertedAt
+            {
+                get { return _insertedAt; }
+            }
+
+            public T Value
+            {
+                get { return _value; }
+            }
         }
 
         #endregion
