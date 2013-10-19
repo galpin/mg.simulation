@@ -16,7 +16,6 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using System.Collections.Generic;
 
 namespace Simulate.Events
 {
@@ -24,7 +23,7 @@ namespace Simulate.Events
     /// Represents a simulation event that executes within a simulation environment.
     /// This class is <see langword="abstract"/>.
     /// </summary>
-    public abstract class Event<TSimulationEnvironment> : Event where TSimulationEnvironment : SimulationEnvironment
+    public abstract class Event<TEvent> : Event, IEquatable<TEvent> where TEvent : Event<TEvent>
     {
         #region Constructors
 
@@ -43,19 +42,45 @@ namespace Simulate.Events
 
         #region Public Methods
 
+        /// <inheritdoc/>
+        public override bool Equals(object other)
+        {
+            return other == this || (other != null && GetType() == other.GetType() && Equals((TEvent)other));
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(TEvent other)
+        {
+            return other == this || (other != null && GeneratedOn == other.GeneratedOn && EqualsCore(other));
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return String.Format("Event<{0}>", typeof(TEvent));
+        }
+
+        #endregion
+
+        #region Protected Methods
+
         /// <summary>
-        /// Execute the event.
+        /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
-        /// <param name="environment">
-        /// The simulation environment in which to execute.
+        /// <param name="other">
+        /// An object to compare with this object.
         /// </param>
         /// <returns>
-        /// An enumerable sequence of <see cref="Event"/>'s that are the result of this events execution.
+        /// <see langword="true"/> if the current object to equal to <paramref name="other"/>;
+        /// otherwise <see langword="false"/>.
         /// </returns>
-        public virtual IEnumerable<Event> Execute(TSimulationEnvironment environment)
-        {
-            yield break;
-        }
+        protected abstract bool EqualsCore(TEvent other);
 
         #endregion
     }
