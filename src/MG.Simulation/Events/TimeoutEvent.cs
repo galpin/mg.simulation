@@ -16,7 +16,7 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Basics;
+using MG.Common;
 
 namespace Simulate.Events
 {

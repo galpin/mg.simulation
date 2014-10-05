@@ -20,7 +20,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Basics;
+using MG.Common;
 
 namespace Simulate.Collections
 {
