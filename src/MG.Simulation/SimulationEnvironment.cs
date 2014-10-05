@@ -1,4 +1,4 @@
-﻿// Simulate.NET
+﻿// MG.Simulation
 //
 // Copyright (c) Martin Galpin 2013.
 //
