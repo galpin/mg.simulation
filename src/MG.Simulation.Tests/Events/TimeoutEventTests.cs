@@ -17,7 +17,7 @@ using System;
 using Moq;
 using Xunit;
 
-namespace Simulate.Events
+namespace MG.Simulation.Events
 {
     public class TimeoutEventTests
     {

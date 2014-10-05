@@ -21,10 +21,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
 using MG.Common;
-using Simulate.Collections;
-using Simulate.Events;
+using MG.Simulation.Collections;
+using MG.Simulation.Events;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// A default <see cref="ISimulationRunner{TSimulationEnvironment}"/> implementation. This class cannot be inherited.

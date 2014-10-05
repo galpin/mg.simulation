@@ -16,10 +16,9 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Moq;
 using Xunit;
 
-namespace Simulate.Events
+namespace MG.Simulation.Events
 {
     public class EventTests
     {

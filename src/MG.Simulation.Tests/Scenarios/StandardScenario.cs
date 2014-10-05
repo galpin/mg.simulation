@@ -17,10 +17,10 @@
 
 using System;
 using System.Collections.Generic;
-using Simulate.Events;
-using Simulate.Scenarios.Support;
+using MG.Simulation.Events;
+using MG.Simulation.Scenarios.Support;
 
-namespace Simulate.Scenarios
+namespace MG.Simulation.Scenarios
 {
     public class StandardScenario : ScenarioBase
     {

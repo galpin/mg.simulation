@@ -16,9 +16,9 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
-using Simulate.Events;
+using MG.Simulation.Events;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// Represents a simulated process that executes within a simulation environment.

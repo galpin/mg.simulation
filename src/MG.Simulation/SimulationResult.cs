@@ -17,7 +17,7 @@
 
 using MG.Common;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// Provides the results of a simulation. This class cannot be inherited.

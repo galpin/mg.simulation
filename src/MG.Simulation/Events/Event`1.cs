@@ -17,7 +17,7 @@
 
 using System;
 
-namespace Simulate.Events
+namespace MG.Simulation.Events
 {
     /// <summary>
     /// Represents a simulation event that executes within a simulation environment.

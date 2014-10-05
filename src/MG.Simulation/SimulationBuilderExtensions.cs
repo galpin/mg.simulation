@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MG.Common;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// Provides extension methods for <see cref="SimulationBuilder"/> instances.

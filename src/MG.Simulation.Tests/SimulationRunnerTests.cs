@@ -19,7 +19,7 @@ using System;
 using Moq;
 using Xunit;
 
-namespace Simulate
+namespace MG.Simulation
 {
     public class SimulationRunnerTests
     {

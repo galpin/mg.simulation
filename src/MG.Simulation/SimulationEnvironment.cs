@@ -16,9 +16,9 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
-using Simulate.Events;
+using MG.Simulation.Events;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// Represents a simulation environment.

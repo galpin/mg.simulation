@@ -18,7 +18,7 @@
 using System;
 using Xunit;
 
-namespace Simulate.Collections
+namespace MG.Simulation.Collections
 {
     public class ArrayExtensionsTests
     {

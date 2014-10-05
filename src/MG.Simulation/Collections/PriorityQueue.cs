@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MG.Common;
 
-namespace Simulate.Collections
+namespace MG.Simulation.Collections
 {
     /// <summary>
     /// Provides a priority queue implementation based on a priority heap. This class cannot be inherited.

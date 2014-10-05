@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-namespace Simulate.Events
+namespace MG.Simulation.Events
 {
     /// <summary>
     /// Represents a visitor for <see cref="Event"/>'s.
@@ -31,7 +31,7 @@ namespace Simulate.Events
         /// The event to visit.
         /// </param>
         /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="@event"/> is <see langword="null"/>.
+        /// Thrown when <paramref name="event"/> is <see langword="null"/>.
         /// </exception>
         void Visit(TimeoutEvent @event);
 

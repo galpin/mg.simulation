@@ -8,7 +8,7 @@
     <ProjectGuid>{827DA341-9569-4C85-B1E4-99214BEC085A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Simulate</RootNamespace>
+    <RootNamespace>MG.Simulation</RootNamespace>
     <AssemblyName>MG.Simulation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

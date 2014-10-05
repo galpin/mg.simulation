@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Sahara Force India Formula One Team 2013.
 
-namespace Simulate.Samples
+namespace MG.Simulation.Samples
 {
     internal class Program
     {

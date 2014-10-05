@@ -7,7 +7,7 @@
     <ProjectGuid>{50D2F75E-36E3-4A21-B838-6A3216EFAC5F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Simulate.Samples</RootNamespace>
+    <RootNamespace>MG.Simulation.Samples</RootNamespace>
     <AssemblyName>MG.Simulation.Samples</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

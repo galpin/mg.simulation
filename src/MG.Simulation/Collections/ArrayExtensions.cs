@@ -17,7 +17,7 @@
 
 using MG.Common;
 
-namespace Simulate.Collections
+namespace MG.Simulation.Collections
 {
     /// <summary>
     /// Provides extension methods for arrays. This class is <see langword="static"/>.

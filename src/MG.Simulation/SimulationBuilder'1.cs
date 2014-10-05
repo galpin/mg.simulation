@@ -19,9 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MG.Common;
-using Simulate.Events;
+using MG.Simulation.Events;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// A mechanism for programmatically building simulations. This class cannot be inherited.

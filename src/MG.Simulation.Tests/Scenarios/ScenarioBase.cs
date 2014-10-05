@@ -18,13 +18,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Simulate.Events;
-using Simulate.Scenarios.Support;
-using Simulate.Support;
+using MG.Simulation.Events;
+using MG.Simulation.Scenarios.Support;
+using MG.Simulation.Support;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Simulate.Scenarios
+namespace MG.Simulation.Scenarios
 {
     public abstract class ScenarioBase : TestClass
     {

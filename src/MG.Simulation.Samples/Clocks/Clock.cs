@@ -2,9 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using Simulate.Events;
+using MG.Simulation.Events;
 
-namespace Simulate.Samples.Clocks
+namespace MG.Simulation.Samples.Clocks
 {
     public class Clock : Process
     {

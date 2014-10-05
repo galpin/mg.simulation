@@ -17,7 +17,7 @@
 
 using System;
 
-namespace Simulate.Scenarios.Support
+namespace MG.Simulation.Scenarios.Support
 {
     public class ActivateProcess : ActivateProcess<SimulationEnvironment>
     {

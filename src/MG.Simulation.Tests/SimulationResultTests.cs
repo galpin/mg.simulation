@@ -18,7 +18,7 @@
 using System;
 using Xunit;
 
-namespace Simulate
+namespace MG.Simulation
 {
     public class SimulationResultTests
     {

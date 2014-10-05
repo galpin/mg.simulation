@@ -21,7 +21,7 @@ using System.Linq;
 using Xunit.Extensions;
 using Xunit.Sdk;
 
-namespace Simulate.Support
+namespace MG.Simulation.Support
 {
     /// <summary>
     /// Provides extension methods for <see cref="Assertions"/> instances. This class is <see langword="static"/>.

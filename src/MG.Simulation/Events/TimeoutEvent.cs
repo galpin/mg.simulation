@@ -18,7 +18,7 @@
 using System;
 using MG.Common;
 
-namespace Simulate.Events
+namespace MG.Simulation.Events
 {
     /// <summary>
     /// An event that delays a process for a specified period of time.

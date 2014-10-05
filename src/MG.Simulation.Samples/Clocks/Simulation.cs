@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Simulate.Samples.Clocks
+namespace MG.Simulation.Samples.Clocks
 {
     public class Simulation
     {

@@ -20,7 +20,7 @@ using System.Linq;
 using Moq;
 using Xunit;
 
-namespace Simulate
+namespace MG.Simulation
 {
     public class SimulationBuilderExtensionsTests
     {

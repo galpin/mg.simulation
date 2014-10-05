@@ -17,7 +17,7 @@
 
 using System;
 
-namespace Simulate
+namespace MG.Simulation
 {
     /// <summary>
     /// A mechanism for programmatically building simulations. This class cannot be inherited.

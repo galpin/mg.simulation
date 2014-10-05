@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
-namespace Simulate.Collections
+namespace MG.Simulation.Collections
 {
     public class PriorityQueueTests
     {

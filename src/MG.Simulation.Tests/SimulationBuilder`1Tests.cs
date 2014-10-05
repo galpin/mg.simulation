@@ -18,10 +18,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Simulate.Events;
+using MG.Simulation.Events;
 using Xunit;
 
-namespace Simulate
+namespace MG.Simulation
 {
     public class SimulationBuilder_1Tests
     {
