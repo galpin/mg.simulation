@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Simulate.Samples</RootNamespace>
-    <AssemblyName>Simulate.Net.Samples</AssemblyName>
+    <AssemblyName>MG.Simulation.Samples</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -53,9 +53,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Simulate.NET\Simulate.NET.csproj">
-      <Project>{827DA341-9569-4C85-B1E4-99214BEC085A}</Project>
-      <Name>Simulate.NET</Name>
+    <ProjectReference Include="..\MG.Simulation\MG.Simulation.csproj">
+      <Project>{827da341-9569-4c85-b1e4-99214bec085a}</Project>
+      <Name>MG.Simulation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
