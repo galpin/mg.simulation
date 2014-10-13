@@ -70,7 +70,7 @@ namespace MG.Simulation.Events
 
         protected override int GetHashCodeCore(HashCodeBuilder builder)
         {
-            return builder.Add(GeneratedOn).Add(Delay).GetHashCode();
+            return builder.Add(GeneratedOn).Add(Delay);
         }
     }
 }
