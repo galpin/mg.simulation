@@ -75,7 +75,7 @@ namespace MG.Simulation
         /// Activates a simulation process.
         /// </summary>
         /// <param name="factory">
-        /// A factory function that creates the <see cref="Process{TSimulationEnvironment}"/> to activate.
+        /// A factory function that creates the <see cref="OnEvent{TSimulationEnvironment}"/> to activate.
         /// </param>
         /// <param name="at">
         /// The optional time at which to activate the process. If not specified, the process will be
@@ -108,7 +108,7 @@ namespace MG.Simulation
         /// Activates a range of simulation processes.
         /// </summary>
         /// <param name="factories">
-        /// A sequence of factory functions that creates a <see cref="Process{TSimulationEnvironment}"/> to activate.
+        /// A sequence of factory functions that creates a <see cref="OnEvent{TSimulationEnvironment}"/> to activate.
         /// </param>
         /// <param name="at">
         /// The optional time at which to activate the processes. If not specified, the processes will be

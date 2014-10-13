@@ -16,6 +16,7 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using MG.Common;
 
 namespace MG.Simulation.Events
 {
@@ -57,13 +58,13 @@ namespace MG.Simulation.Events
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return GetHashCodeCore(HashCodeBuilder.For<TEvent>().Add(GeneratedOn));
         }
 
         /// <inheritdoc/>
         public override string ToString()
         {
-            return String.Format("Event<{0}>", typeof(TEvent));
+            return String.Format("Event<{0}>()", typeof(TEvent));
         }
 
         #endregion
@@ -81,6 +82,13 @@ namespace MG.Simulation.Events
         /// otherwise <see langword="false"/>.
         /// </returns>
         protected abstract bool EqualsCore(TEvent other);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        protected abstract int GetHashCodeCore(HashCodeBuilder builder);
 
         #endregion
     }

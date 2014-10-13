@@ -23,15 +23,9 @@ namespace MG.Simulation.Events
     /// <summary>
     /// An event that delays a process for a specified period of time.
     /// </summary>
-    public class TimeoutEvent : Event
+    public class TimeoutEvent : Event<TimeoutEvent>
     {
-        #region Declarations
-
         private readonly TimeSpan _delay;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of <see cref="TimeoutEvent"/>.
@@ -53,10 +47,6 @@ namespace MG.Simulation.Events
             _delay = delay;
         }
 
-        #endregion
-
-        #region Public Properties
-
         /// <summary>
         /// Gets the time for which to delay.
         /// </summary>
@@ -64,10 +54,6 @@ namespace MG.Simulation.Events
         {
             get { return _delay; }
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <inheritdoc/>
         public override sealed void Accept(IEventVisitor visitor)
@@ -77,6 +63,14 @@ namespace MG.Simulation.Events
             visitor.Visit(this);
         } 
 
-        #endregion
+        protected override bool EqualsCore(TimeoutEvent other)
+        {
+            return GeneratedOn == other.GeneratedOn && Delay == other.Delay;
+        }
+
+        protected override int GetHashCodeCore(HashCodeBuilder builder)
+        {
+            return builder.Add(GeneratedOn).Add(Delay).GetHashCode();
+        }
     }
 }

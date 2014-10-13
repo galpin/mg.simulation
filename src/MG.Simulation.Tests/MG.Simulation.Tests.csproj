@@ -83,7 +83,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\Support\ActivateProcess.cs" />
     <Compile Include="Scenarios\ScenarioBase.cs" />
-    <Compile Include="Scenarios\StandardScenario.cs" />
+    <Compile Include="Scenarios\Timeouts\ClockScenarioBase.cs" />
+    <Compile Include="Scenarios\Timeouts\InterleavingScenario.cs" />
+    <Compile Include="Scenarios\Timeouts\StandardScenario.cs" />
     <Compile Include="Scenarios\Support\ActivateProcess`1.cs" />
     <Compile Include="SimulationBuilderExtensionsTests.cs" />
     <Compile Include="SimulationBuilderTests.cs" />
@@ -97,6 +99,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\mg.common\src\MG.Common\MG.Common.csproj">
+      <Project>{97A80A0F-3101-44B7-9821-CF8D81080296}</Project>
+      <Name>MG.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MG.Simulation\MG.Simulation.csproj">
       <Project>{827da341-9569-4c85-b1e4-99214bec085a}</Project>
       <Name>MG.Simulation</Name>

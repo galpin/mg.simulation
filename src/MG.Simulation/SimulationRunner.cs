@@ -18,6 +18,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Subjects;
 using MG.Common;
@@ -99,7 +100,7 @@ namespace MG.Simulation
         {
             Guard.IsInRange(until >= TimeSpan.Zero, "until");
 
-            while (_eventQueue.Any() && _environment.Now < until)
+            while (_eventQueue.Any() && _environment.Now <= until)
             {
                 Step(until);
             }
@@ -116,10 +117,10 @@ namespace MG.Simulation
             var eventEnumerator = _eventQueue.Dequeue();
             if (eventEnumerator.At > until)
             {
-                _environment.Now = until;
+                _environment.AdvanceTo(until);
                 return;
             }
-            _environment.Now = eventEnumerator.At;
+            _environment.AdvanceTo(eventEnumerator.At);
             if (eventEnumerator.MoveNext())
             {
                 _events.OnNext(eventEnumerator.Current);
@@ -175,7 +176,7 @@ namespace MG.Simulation
 
             public int CompareTo(ScheduledEventEnumerator other)
             {
-                return At.CompareTo(other.At);
+                return other.At.CompareTo(At);
             }
         }
 

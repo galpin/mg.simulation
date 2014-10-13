@@ -16,6 +16,7 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Diagnostics;
 using MG.Simulation.Events;
 
 namespace MG.Simulation
@@ -30,7 +31,7 @@ namespace MG.Simulation
         /// <summary>
         /// Gets the current simulation time.
         /// </summary>
-        public TimeSpan Now { get; internal set; }
+        public TimeSpan Now { get; private set; }
 
         #endregion
 
@@ -50,6 +51,16 @@ namespace MG.Simulation
             return new TimeoutEvent(Now, delay);
         }
 
+        public virtual void Process(Event e)
+        {
+        }
+
         #endregion
+
+        internal void AdvanceTo(TimeSpan now)
+        {
+            Debug.WriteLine("{0}: advancing simulation clock to {1}", Now, now);
+            Now = now;
+        }
     }
 }

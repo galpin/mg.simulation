@@ -30,9 +30,9 @@ namespace MG.Simulation.Scenarios
     {
         #region Declarations
 
-        private static readonly TimeSpan MaxDuration = TimeSpan.FromHours(1);
-
         private readonly TimeSpan _maxDuration;
+
+        private static readonly TimeSpan MaxDuration = TimeSpan.FromHours(1);
 
         #endregion
 
@@ -101,6 +101,11 @@ namespace MG.Simulation.Scenarios
         protected ActivateProcess A(Process<SimulationEnvironment> process, TimeSpan? at = null)
         {
             return new ActivateProcess(at ?? TimeSpan.Zero, process);
+        }
+
+        protected static TimeSpan T(double seconds)
+        {
+            return TimeSpan.FromSeconds(seconds);
         }
 
         #endregion

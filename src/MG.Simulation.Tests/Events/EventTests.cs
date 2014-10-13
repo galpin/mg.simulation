@@ -16,6 +16,7 @@
 // License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using MG.Common;
 using Xunit;
 
 namespace MG.Simulation.Events
@@ -53,6 +54,11 @@ namespace MG.Simulation.Events
             protected override bool EqualsCore(StubEvent other)
             {
                 return true;
+            }
+
+            protected override int GetHashCodeCore(HashCodeBuilder builder)
+            {
+                return builder.GetHashCode();
             }
         }
 
