@@ -18,7 +18,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Subjects;
 using MG.Common;
@@ -205,6 +204,10 @@ namespace MG.Simulation
             {
                 _enumerator.At = _runner.Environment.Now + @event.Delay;
                 _runner.Enqueue(_enumerator);
+            }
+
+            public void Visit(CompositeEvent @event)
+            {
             }
         }
 

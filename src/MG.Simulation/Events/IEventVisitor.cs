@@ -35,6 +35,17 @@ namespace MG.Simulation.Events
         /// </exception>
         void Visit(TimeoutEvent @event);
 
+        /// <summary>
+        /// Visits the specified event.
+        /// </summary>
+        /// <param name="event">
+        /// The event to visit.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when <paramref name="event"/> is <see langword="null"/>.
+        /// </exception>
+        void Visit(CompositeEvent @event);
+
         #endregion
     }
 }

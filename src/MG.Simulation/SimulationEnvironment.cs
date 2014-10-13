@@ -38,7 +38,7 @@ namespace MG.Simulation
         #region Public Methods
 
         /// <summary>
-        /// Creates a new <see cref="TimeoutEvent"/> that delays for a specified period of time.
+        /// Returns a new <see cref="TimeoutEvent"/> that delays for a specified period of time.
         /// </summary>
         /// <param name="delay">
         /// The time for which to delay a process.
@@ -49,6 +49,20 @@ namespace MG.Simulation
         public TimeoutEvent Timeout(TimeSpan delay)
         {
             return new TimeoutEvent(Now, delay);
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="CompositeEvent"/> that is composed of <paramref name="innerEvents"/>.
+        /// </summary>
+        /// <param name="innerEvents">
+        /// The inner events.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="CompositeEvent"/> that is composed of <paramref name="innerEvents"/>.
+        /// </returns>
+        public CompositeEvent Composite(params Event[] innerEvents)
+        {
+            return new CompositeEvent(Now, innerEvents);
         }
 
         public virtual void Process(Event e)

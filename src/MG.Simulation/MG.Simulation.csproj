@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Collections\ArrayExtensions.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Events\CompositeEvent.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Events\Event`1.cs" />
     <Compile Include="Process`1.cs" />
