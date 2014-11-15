@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MG.Simulation", "MG.Simulation\MG.Simulation.csproj", "{827DA341-9569-4C85-B1E4-99214BEC085A}"
 EndProject
@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MG.Simulation.Samples", "MG
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D45B3DBE-98DD-4713-A6BA-94361D95785C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MG.Common", "..\lib\mg.common\src\MG.Common\MG.Common.csproj", "{97A80A0F-3101-44B7-9821-CF8D81080296}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MG.Common", "..\lib\mg.framework\src\MG.Common\MG.Common\MG.Common.csproj", "{97A80A0F-3101-44B7-9821-CF8D81080296}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

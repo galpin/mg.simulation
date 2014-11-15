@@ -99,8 +99,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\mg.common\src\MG.Common\MG.Common.csproj">
-      <Project>{97A80A0F-3101-44B7-9821-CF8D81080296}</Project>
+    <ProjectReference Include="..\..\lib\mg.framework\src\MG.Common\MG.Common\MG.Common.csproj">
+      <Project>{97a80a0f-3101-44b7-9821-cf8d81080296}</Project>
       <Name>MG.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\MG.Simulation\MG.Simulation.csproj">
