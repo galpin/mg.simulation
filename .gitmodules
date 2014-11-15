@@ -1,0 +1,3 @@
+[submodule "lib/mg.framework"]
+	path = lib/mg.framework
+	url = https://github.com/galpin/mg.framework.git
