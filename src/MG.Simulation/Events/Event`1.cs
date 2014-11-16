@@ -84,10 +84,14 @@ namespace MG.Simulation.Events
         protected abstract bool EqualsCore(TEvent other);
 
         /// <summary>
-        /// 
+        /// Generates a hash code for the object.
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">
+        /// The builder with which a hashcode can be constructed.
+        /// </param>
+        /// <returns>
+        /// A hashcode for the current object.
+        /// </returns>
         protected abstract int GetHashCodeCore(HashCodeBuilder builder);
 
         #endregion

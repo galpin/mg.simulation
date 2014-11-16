@@ -37,7 +37,7 @@ namespace MG.Simulation
         #region Methods
 
         /// <summary>
-        /// Activate a <see cref="OnEvent{TSimulationEnvironment}"/> at a specified time.
+        /// Activate a <see cref="Process{TSimulationEnvironment}"/> at a specified time.
         /// </summary>
         /// <param name="at">
         /// The time at which to activate <paramref name="process"/>.
